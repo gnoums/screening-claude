@@ -1,7 +1,7 @@
 /.phpunit.cache
 *.zip
 /node_modules
-/public/build
+# /public/build
 /public/hot
 /public/storage
 /public/preview-*.html
