@@ -56,7 +56,7 @@ class ScreeningRequestController extends Controller
         abort_unless($patient->user_id === $request->user()->id, 403);
 
         try {
-            $screeningRequest = $this->service->createAndSend(
+            ['request' => $screeningRequest, 'accessUrl' => $accessUrl] = $this->service->createAndSend(
                 psychologist:      $request->user(),
                 patient:           $patient,
                 assessmentIds:     $validated['assessment_ids'],
@@ -69,7 +69,8 @@ class ScreeningRequestController extends Controller
 
         return redirect()
             ->route('psychologist.screenings.show', $screeningRequest)
-            ->with('success', 'Solicitud enviada correctamente.');
+            ->with('success', 'Solicitud enviada correctamente.')
+            ->with('access_url', $accessUrl);
     }
 
     public function show(Request $request, ScreeningRequest $screening): View
@@ -102,6 +103,25 @@ class ScreeningRequestController extends Controller
         \App\Jobs\SendScreeningEmailJob::dispatch($screening->id, $url, $screening->recipient_email);
 
         return back()->with('success', 'Enlace de acceso re-enviado al paciente.');
+    }
+
+    /**
+     * Genera un nuevo token y devuelve el enlace para compartir manualmente
+     * (sin enviar email). Útil para compartir por WhatsApp u otras plataformas.
+     */
+    public function getLink(Request $request, ScreeningRequest $screening): \Illuminate\Http\JsonResponse
+    {
+        $this->authorizeRequest($request, $screening);
+
+        abort_if(in_array($screening->status, ['completed', 'cancelled']), 422, 'No se puede generar enlace.');
+
+        ['plain' => $plainToken] = $this->tokenService->generate($screening);
+        $url = $this->tokenService->generateUrl($plainToken);
+
+        return response()->json([
+            'url'        => $url,
+            'expires_at' => now()->addHours((int) config('screening.token_ttl_hours', 72))->format('d/m/Y H:i'),
+        ]);
     }
 
     // ----------------------------------------------------------------

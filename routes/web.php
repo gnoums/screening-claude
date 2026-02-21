@@ -64,6 +64,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('screenings/{screening}/resend', [ScreeningRequestController::class, 'resend'])
         ->name('psychologist.screenings.resend');
 
+    Route::post('screenings/{screening}/link', [ScreeningRequestController::class, 'getLink'])
+        ->name('psychologist.screenings.get-link');
+
     // Exportar PDF de resultados
     Route::get('screenings/{screening}/pdf', [ReportController::class, 'download'])
         ->name('psychologist.screenings.pdf');

@@ -24,6 +24,7 @@ class ScreeningRequestService
      * Crea y envía una solicitud de tamizaje completa.
      *
      * @param  array<int>  $assessmentIds  IDs de pruebas a incluir
+     * @return array{request: ScreeningRequest, accessUrl: string}
      */
     public function createAndSend(
         User    $psychologist,
@@ -31,7 +32,7 @@ class ScreeningRequestService
         array   $assessmentIds,
         string  $recipientEmail,
         ?string $messageToPatient = null,
-    ): ScreeningRequest {
+    ): array {
         $emailUrl = null;
 
         $request = DB::transaction(function () use (
@@ -89,6 +90,6 @@ class ScreeningRequestService
         // no haga rollback de los créditos y la solicitud ya creada.
         SendScreeningEmailJob::dispatch($request->id, $emailUrl, $recipientEmail);
 
-        return $request;
+        return ['request' => $request, 'accessUrl' => $emailUrl];
     }
 }
