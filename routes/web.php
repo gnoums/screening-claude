@@ -133,4 +133,16 @@ Route::middleware(['auth', 'admin'])
             ->name('assessments.rules.destroy');
     });
 
+// ====================================================================
+// Debug temporal — solo admin — ELIMINAR después de diagnosticar
+// ====================================================================
+Route::middleware(['auth', 'admin'])->get('/admin/debug-log', function () {
+    $logFile = storage_path('logs/laravel.log');
+    if (! file_exists($logFile)) {
+        return response('Log vacío o no existe.', 200)->header('Content-Type', 'text/plain');
+    }
+    $lines  = array_slice(file($logFile), -150);
+    return response(implode('', $lines), 200)->header('Content-Type', 'text/plain');
+})->name('admin.debug-log');
+
 require __DIR__ . '/auth.php';

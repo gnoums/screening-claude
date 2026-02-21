@@ -32,12 +32,15 @@ class ScreeningRequestService
         string  $recipientEmail,
         ?string $messageToPatient = null,
     ): ScreeningRequest {
-        return DB::transaction(function () use (
+        $emailUrl = null;
+
+        $request = DB::transaction(function () use (
             $psychologist,
             $patient,
             $assessmentIds,
             $recipientEmail,
             $messageToPatient,
+            &$emailUrl,
         ) {
             $assessments    = Assessment::active()->whereIn('id', $assessmentIds)->get();
             $totalCredits   = $assessments->sum('credits_cost');
@@ -71,16 +74,21 @@ class ScreeningRequestService
 
             // Generar token seguro
             ['plain' => $plainToken] = $this->tokenService->generate($request);
-            $url = $this->tokenService->generateUrl($plainToken);
+            $emailUrl = $this->tokenService->generateUrl($plainToken);
 
             // Descontar créditos
             $this->creditsService->chargeForRequest($request);
 
-            // Actualizar estado y despachar email a la cola
+            // Marcar como enviada — el email se despacha fuera de la transacción
             $request->update(['status' => 'sent', 'sent_at' => now()]);
-            SendScreeningEmailJob::dispatch($request->id, $url, $recipientEmail);
 
             return $request->load('items.assessment');
         });
+
+        // Despachar fuera de la transacción para que un fallo de SMTP
+        // no haga rollback de los créditos y la solicitud ya creada.
+        SendScreeningEmailJob::dispatch($request->id, $emailUrl, $recipientEmail);
+
+        return $request;
     }
 }
