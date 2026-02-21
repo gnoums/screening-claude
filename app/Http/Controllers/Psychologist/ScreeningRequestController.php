@@ -56,7 +56,12 @@ class ScreeningRequestController extends Controller
         abort_unless($patient->user_id === $request->user()->id, 403);
 
         try {
-            ['request' => $screeningRequest, 'accessUrl' => $accessUrl] = $this->service->createAndSend(
+            [
+                'request'    => $screeningRequest,
+                'accessUrl'  => $accessUrl,
+                'emailSent'  => $emailSent,
+                'emailError' => $emailError,
+            ] = $this->service->createAndSend(
                 psychologist:      $request->user(),
                 patient:           $patient,
                 assessmentIds:     $validated['assessment_ids'],
@@ -67,9 +72,15 @@ class ScreeningRequestController extends Controller
             return back()->withErrors(['general' => $e->getMessage()])->withInput();
         }
 
+        $flash = $emailSent
+            ? ['success' => 'Evaluación creada y correo enviado correctamente.']
+            : ['warning' => 'Evaluación creada, pero el correo no pudo enviarse ('
+                . ($emailError ?? 'error desconocido')
+                . '). Usa el enlace de abajo para compartirlo manualmente.'];
+
         return redirect()
             ->route('psychologist.screenings.show', $screeningRequest)
-            ->with('success', 'Solicitud enviada correctamente.')
+            ->with($flash)
             ->with('access_url', $accessUrl);
     }
 

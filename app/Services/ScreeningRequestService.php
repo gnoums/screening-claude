@@ -92,16 +92,21 @@ class ScreeningRequestService
         // Se envuelve en try-catch para que un fallo de SMTP no interrumpa
         // el flujo — la solicitud ya fue creada y el psicólogo tiene el
         // enlace disponible en pantalla para compartirlo manualmente.
+        $emailSent  = false;
+        $emailError = null;
+
         try {
             SendScreeningEmailJob::dispatchSync($request->id, $emailUrl, $recipientEmail);
+            $emailSent = true;
         } catch (\Throwable $e) {
+            $emailError = $e->getMessage();
             Log::error('No se pudo enviar el email de invitación de tamizaje', [
                 'screening_request_id' => $request->id,
                 'recipient'            => $recipientEmail,
-                'error'                => $e->getMessage(),
+                'error'                => $emailError,
             ]);
         }
 
-        return ['request' => $request, 'accessUrl' => $emailUrl];
+        return ['request' => $request, 'accessUrl' => $emailUrl, 'emailSent' => $emailSent, 'emailError' => $emailError];
     }
 }
