@@ -23,11 +23,11 @@ class CreditsService
         string $description = '',
         mixed  $reference = null,
     ): CreditsLedger {
-        if ($amount <= 0) {
-            throw new \InvalidArgumentException('El monto de recarga debe ser positivo.');
+        if ($amount === 0) {
+            throw new \InvalidArgumentException('El monto no puede ser cero.');
         }
 
-        return $this->record($user, abs($amount), $type, $description, $reference);
+        return $this->record($user, $amount, $type, $description, $reference);
     }
 
     /**

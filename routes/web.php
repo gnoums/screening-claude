@@ -1,20 +1,31 @@
 <?php
 
+use App\Http\Controllers\Admin\AssessmentController as AdminAssessmentController;
+use App\Http\Controllers\Admin\AuditLogController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Psychologist\BillingController;
 use App\Http\Controllers\Psychologist\DashboardController;
 use App\Http\Controllers\Psychologist\PatientController;
 use App\Http\Controllers\Psychologist\ReportController;
 use App\Http\Controllers\Psychologist\ScreeningRequestController;
 use App\Http\Controllers\Public\ScreeningController;
+use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 
 // ====================================================================
-// Rutas públicas (sin autenticación) — Acceso de paciente vía token
-// Rate limit: 30 req/min por IP (configurado en config/screening.php)
+// Webhook de Stripe — sin CSRF (excluido en bootstrap/app.php)
 // ====================================================================
 
-// Esta ruta DEBE declararse ANTES de /s/{token} para que "gracias"
-// no sea capturado como valor del parámetro token.
+Route::post('stripe/webhook', StripeWebhookController::class)
+    ->name('stripe.webhook');
+
+// ====================================================================
+// Rutas públicas — Paciente vía token
+// Esta ruta DEBE ir ANTES de /s/{token}
+// ====================================================================
+
 Route::get('/s/gracias', [ScreeningController::class, 'completed'])
     ->name('public.screening.completed');
 
@@ -57,10 +68,69 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('screenings/{screening}/pdf', [ReportController::class, 'download'])
         ->name('psychologist.screenings.pdf');
 
+    // ----------------------------------------------------------------
+    // Facturación y créditos (Stripe)
+    // ----------------------------------------------------------------
+    Route::prefix('billing')->name('psychologist.billing.')->group(function () {
+        Route::get('/', [BillingController::class, 'index'])->name('index');
+        Route::post('/checkout', [BillingController::class, 'checkout'])->name('checkout');
+        Route::get('/success', [BillingController::class, 'success'])->name('success');
+    });
+
     // Perfil (Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// ====================================================================
+// Panel de administración — solo role=admin
+// ====================================================================
+
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        // Dashboard
+        Route::get('/', AdminDashboardController::class)->name('dashboard');
+
+        // Gestión de usuarios
+        Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
+        Route::get('users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+        Route::post('users/{user}/credits', [AdminUserController::class, 'adjustCredits'])->name('users.credits');
+        Route::patch('users/{user}/role', [AdminUserController::class, 'updateRole'])->name('users.role');
+
+        // Audit logs
+        Route::get('audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
+
+        // Pruebas de tamizaje
+        Route::get('assessments', [AdminAssessmentController::class, 'index'])->name('assessments.index');
+        Route::get('assessments/create', [AdminAssessmentController::class, 'create'])->name('assessments.create');
+        Route::post('assessments', [AdminAssessmentController::class, 'store'])->name('assessments.store');
+        Route::get('assessments/{assessment}', [AdminAssessmentController::class, 'show'])->name('assessments.show');
+        Route::get('assessments/{assessment}/edit', [AdminAssessmentController::class, 'edit'])->name('assessments.edit');
+        Route::patch('assessments/{assessment}', [AdminAssessmentController::class, 'update'])->name('assessments.update');
+
+        // Preguntas
+        Route::post('assessments/{assessment}/questions', [AdminAssessmentController::class, 'storeQuestion'])
+            ->name('assessments.questions.store');
+        Route::patch('questions/{question}', [AdminAssessmentController::class, 'updateQuestion'])
+            ->name('assessments.questions.update');
+        Route::delete('questions/{question}', [AdminAssessmentController::class, 'destroyQuestion'])
+            ->name('assessments.questions.destroy');
+
+        // Opciones
+        Route::post('questions/{question}/options', [AdminAssessmentController::class, 'storeOption'])
+            ->name('assessments.options.store');
+        Route::delete('options/{option}', [AdminAssessmentController::class, 'destroyOption'])
+            ->name('assessments.options.destroy');
+
+        // Reglas de interpretación
+        Route::post('assessments/{assessment}/rules', [AdminAssessmentController::class, 'storeRule'])
+            ->name('assessments.rules.store');
+        Route::delete('rules/{rule}', [AdminAssessmentController::class, 'destroyRule'])
+            ->name('assessments.rules.destroy');
+    });
 
 require __DIR__ . '/auth.php';

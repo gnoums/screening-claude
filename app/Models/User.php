@@ -17,6 +17,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     protected $hidden = [
@@ -59,6 +60,25 @@ class User extends Authenticatable
     public function reportExports(): HasMany
     {
         return $this->hasMany(ReportExport::class);
+    }
+
+    public function stripePayments(): HasMany
+    {
+        return $this->hasMany(StripePayment::class);
+    }
+
+    // ----------------------------------------------------------------
+    // Role helpers
+    // ----------------------------------------------------------------
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isPsychologist(): bool
+    {
+        return $this->role === 'psychologist';
     }
 
     // ----------------------------------------------------------------
