@@ -9,6 +9,7 @@ use App\Models\ScreeningRequest;
 use App\Models\ScreeningRequestItem;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Orquesta la creación y envío de solicitudes de tamizaje.
@@ -86,9 +87,20 @@ class ScreeningRequestService
             return $request->load('items.assessment');
         });
 
-        // Despachar fuera de la transacción para que un fallo de SMTP
-        // no haga rollback de los créditos y la solicitud ya creada.
-        SendScreeningEmailJob::dispatch($request->id, $emailUrl, $recipientEmail);
+        // dispatchSync() ejecuta el job de forma inmediata y síncrona,
+        // sin depender del driver de cola ni de un queue worker.
+        // Se envuelve en try-catch para que un fallo de SMTP no interrumpa
+        // el flujo — la solicitud ya fue creada y el psicólogo tiene el
+        // enlace disponible en pantalla para compartirlo manualmente.
+        try {
+            SendScreeningEmailJob::dispatchSync($request->id, $emailUrl, $recipientEmail);
+        } catch (\Throwable $e) {
+            Log::error('No se pudo enviar el email de invitación de tamizaje', [
+                'screening_request_id' => $request->id,
+                'recipient'            => $recipientEmail,
+                'error'                => $e->getMessage(),
+            ]);
+        }
 
         return ['request' => $request, 'accessUrl' => $emailUrl];
     }
