@@ -23,7 +23,7 @@ class ScreeningInvitationMail extends Mailable
 
     public function envelope(): Envelope
     {
-        $psychologistName = $request->user->name;
+        $psychologistName = $this->request->user->name;
 
         return new Envelope(
             subject: "Evaluación psicológica de {$psychologistName} – Ingresa aquí",
