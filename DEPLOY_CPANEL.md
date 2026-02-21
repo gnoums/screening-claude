@@ -1,159 +1,229 @@
 # Despliegue en cPanel — PsicoScreen
-
-Guía paso a paso para desplegar en hosting compartido con cPanel + MySQL.
+**Dominio destino:** `https://app.dev2byroca.com`
 
 ---
 
-## Arquitectura objetivo
+## Arquitectura
 
 ```
-app.midominio.com  (subdominio cPanel)
-    └── public_html/app/       ← Document Root del subdominio
-         ├── index.php          ← symlink o copia de public/index.php
-         └── .htaccess          ← rewrite rules de Laravel
-/home/usuario/psicoscreen/     ← Código fuente de Laravel (FUERA de public_html)
-    ├── app/
-    ├── config/
-    ├── ...
-    └── public/ → mapeado al Document Root
+app.dev2byroca.com
+  └── Document Root → /home/tu_usuario/psicoscreen/public
+
+/home/tu_usuario/psicoscreen/    ← código Laravel (FUERA de public_html)
 ```
 
-> **Regla de oro:** El código fuente de Laravel **nunca** debe estar dentro de `public_html`.
+> El código fuente de Laravel **nunca** debe estar dentro de `public_html`.
 > Solo el contenido de `public/` se expone al web.
 
 ---
 
 ## Checklist de despliegue
 
-### 1. Preparar el servidor
+### 1. Requisitos del servidor
 
-- [ ] Verificar versión de PHP: **8.2+** (en cPanel → Software → PHP Selector)
-- [ ] Habilitar extensiones PHP: `pdo_mysql`, `mbstring`, `openssl`, `fileinfo`, `xml`, `gd`, `zip`
-- [ ] Asegurarse de que `allow_url_fopen = On` y `display_errors = Off` en producción
+En cPanel → Software → PHP Selector:
+- [ ] PHP **8.2 o superior**
+- [ ] Extensiones activas: `pdo_mysql`, `mbstring`, `openssl`, `fileinfo`, `xml`, `gd`, `zip`, `curl`
+- [ ] `allow_url_fopen = On`, `display_errors = Off`
 
-### 2. Subir el código
+### 2. Crear la base de datos MySQL
 
+En cPanel → **MySQL Databases**:
+1. Crear base de datos: `tu_usuario_psicoscreen`
+2. Crear usuario: `tu_usuario_dbuser` con contraseña segura (16+ caracteres)
+3. Asignar usuario a la base de datos con **All Privileges**
+
+### 3. Subir el código fuente
+
+**Opción A — Git via SSH (recomendado)**
 ```bash
-# Opción A: Git (si el hosting soporta git vía SSH)
-git clone https://github.com/tuusuario/psicoscreen.git /home/usuario/psicoscreen
-cd /home/usuario/psicoscreen
+ssh tu_usuario@dev2byroca.com
+git clone https://github.com/tuusuario/screening-claude.git /home/tu_usuario/psicoscreen
+cd /home/tu_usuario/psicoscreen
 git checkout main
-
-# Opción B: FTP/SFTP
-# Subir todos los archivos EXCEPTO /vendor a /home/usuario/psicoscreen/
-# Luego ejecutar composer install en el servidor
-
 composer install --optimize-autoloader --no-dev
 ```
 
-### 3. Configurar el Document Root del subdominio
+**Opción B — FTP/SFTP**
+- Subir todos los archivos EXCEPTO `/vendor` y `/node_modules`
+- Conectar por SSH y ejecutar: `composer install --optimize-autoloader --no-dev`
 
-En cPanel → **Subdominios**, crear `app.midominio.com` con Document Root:
+### 4. Subir los assets compilados del frontend
+
+Los assets CSS/JS compilados por Vite están en `public/build/` (ignorado en git).
+
+**Compilar en local y subir por FTP:**
+```bash
+# En tu máquina local, dentro del proyecto:
+npm install && npm run build
+# Luego subir por FTP la carpeta public/build/ al servidor en:
+# /home/tu_usuario/psicoscreen/public/build/
 ```
-/home/usuario/psicoscreen/public
-```
 
-### 4. Configurar .htaccess
+### 5. Configurar el Document Root del subdominio
 
-El archivo `public/.htaccess` de Laravel ya maneja el rewrite. Verificar que `mod_rewrite` esté activo. Si no, añadir en cPanel → Apache Handlers.
+En cPanel → **Subdominios** o **Addon Domains**:
+- Subdominio: `app`
+- Dominio: `dev2byroca.com`
+- **Document Root**: `/home/tu_usuario/psicoscreen/public`
 
-### 5. Configurar variables de entorno
+### 6. Configurar variables de entorno
 
 ```bash
+cd /home/tu_usuario/psicoscreen
 cp .env.example .env
-# Editar .env con los valores reales:
 nano .env
 ```
 
-Valores críticos a configurar:
-
+Variables críticas a llenar:
 ```dotenv
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://app.midominio.com
+APP_URL=https://app.dev2byroca.com
+APP_KEY=                          # se genera en el paso 7
 
-DB_CONNECTION=mysql
-DB_HOST=localhost          # en cPanel casi siempre es localhost
-DB_PORT=3306
-DB_DATABASE=usuario_dbname # formato cPanel: usuario_nombre
-DB_USERNAME=usuario_dbuser
+DB_DATABASE=tu_usuario_psicoscreen
+DB_USERNAME=tu_usuario_dbuser
 DB_PASSWORD=tu_password_segura
 
-SESSION_DRIVER=database
-QUEUE_CONNECTION=database
-CACHE_STORE=database
+MAIL_USERNAME=noreply@dev2byroca.com
+MAIL_PASSWORD=contraseña_de_aplicacion_zoho
 
-MAIL_MAILER=smtp
-MAIL_HOST=mail.midominio.com
-MAIL_PORT=465
-MAIL_SCHEME=ssl
-MAIL_USERNAME=noreply@midominio.com
-MAIL_PASSWORD=password_del_correo
-MAIL_FROM_ADDRESS=noreply@midominio.com
-MAIL_FROM_NAME="PsicoScreen"
-
-SCREENING_TOKEN_TTL_HOURS=72
+STRIPE_KEY=pk_live_...
+STRIPE_SECRET=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+STRIPE_PRICE_CREDITS_10=price_...
+STRIPE_PRICE_CREDITS_30=price_...
+STRIPE_PRICE_CREDITS_100=price_...
 ```
 
-### 6. Generar clave de aplicación
+### 7. Generar clave de aplicación
 
 ```bash
 php artisan key:generate
 ```
 
-### 7. Ejecutar migraciones y seeders
+### 8. Ejecutar migraciones y seeders
 
 ```bash
 php artisan migrate --force
 php artisan db:seed --class=AssessmentSeeder --force
 ```
 
-### 8. Optimizar para producción
+> Crea las 14 tablas y siembra PHQ-9 y GAD-7 con sus preguntas y reglas de interpretación.
+
+### 9. Optimizar para producción
 
 ```bash
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 php artisan event:cache
+php artisan storage:link
 ```
 
-> ⚠️ Después de cualquier cambio en `.env`, correr `php artisan config:clear && php artisan config:cache`
+> ⚠️ Después de cualquier cambio en `.env`: `php artisan config:clear && php artisan config:cache`
 
-### 9. Configurar permisos de directorios
+### 10. Permisos de directorios
 
 ```bash
-chmod -R 755 /home/usuario/psicoscreen
-chmod -R 775 /home/usuario/psicoscreen/storage
-chmod -R 775 /home/usuario/psicoscreen/bootstrap/cache
+chmod -R 755 /home/tu_usuario/psicoscreen
+chmod -R 775 /home/tu_usuario/psicoscreen/storage
+chmod -R 775 /home/tu_usuario/psicoscreen/bootstrap/cache
 ```
 
-### 10. Configurar el Cron Job para colas (CRÍTICO)
+### 11. Cron Jobs en cPanel
 
-En cPanel → **Cron Jobs**, agregar:
+En cPanel → **Cron Jobs**, agregar estas 3 tareas:
 
+**Procesador de colas de email** (cada minuto):
 ```
-* * * * * /usr/bin/php /home/usuario/psicoscreen/artisan queue:work --stop-when-empty --max-jobs=20 --max-time=50 >> /home/usuario/psicoscreen/storage/logs/queue.log 2>&1
-```
-
-**Explicación:**
-- `--stop-when-empty`: el proceso muere cuando no hay jobs (compatible con hosting sin workers persistentes)
-- `--max-jobs=20`: límite de jobs por ejecución del cron
-- `--max-time=50`: termina antes de los 60 segundos del cron siguiente
-- El cron se ejecuta cada minuto, procesando jobs pendientes
-
-**Limpieza de jobs fallidos** (cron adicional, diario a las 2am):
-```
-0 2 * * * /usr/bin/php /home/usuario/psicoscreen/artisan queue:prune-failed --hours=168 >> /dev/null 2>&1
+* * * * * /usr/bin/php /home/tu_usuario/psicoscreen/artisan queue:work --stop-when-empty --max-jobs=20 --max-time=50 >> /home/tu_usuario/psicoscreen/storage/logs/queue.log 2>&1
 ```
 
-**Expirar tokens vencidos** (cron adicional, cada hora):
+**Expirar tokens vencidos** (cada hora):
 ```
-0 * * * * /usr/bin/php /home/usuario/psicoscreen/artisan screening:expire-tokens >> /dev/null 2>&1
+0 * * * * /usr/bin/php /home/tu_usuario/psicoscreen/artisan screening:expire-tokens >> /dev/null 2>&1
+```
+
+**Limpiar jobs fallidos** (diario a las 2am):
+```
+0 2 * * * /usr/bin/php /home/tu_usuario/psicoscreen/artisan queue:prune-failed --hours=168 >> /dev/null 2>&1
+```
+
+> Si no sabes la ruta de PHP en el servidor: `which php`
+
+### 12. Configurar SSL
+
+En cPanel → **SSL/TLS** → Let's Encrypt:
+- [ ] Emitir certificado para `app.dev2byroca.com`
+- [ ] Habilitar **Force HTTPS Redirect**
+
+### 13. Configurar Stripe Webhook
+
+En el [Dashboard de Stripe](https://dashboard.stripe.com/webhooks):
+1. **Add endpoint** → URL: `https://app.dev2byroca.com/stripe/webhook`
+2. Eventos a escuchar: `checkout.session.completed`
+3. Copiar el **Signing secret** (`whsec_...`) → pegar en `.env` como `STRIPE_WEBHOOK_SECRET`
+
+---
+
+## Configurar Zoho Mail (SMTP)
+
+1. En [Zoho Mail Admin Console](https://mailadmin.zoho.com):
+   - Verificar el dominio `dev2byroca.com` (registro TXT en tu DNS)
+   - Crear dirección: `noreply@dev2byroca.com`
+2. En la cuenta Zoho → **Seguridad** → **Contraseñas de aplicación**:
+   - Crear contraseña para "PsicoScreen SMTP"
+   - Usar esa contraseña (no la de tu cuenta Zoho) en `MAIL_PASSWORD`
+3. Registros DNS recomendados para evitar spam:
+   ```
+   SPF:   v=spf1 include:zoho.com ~all
+   DKIM:  generado en Zoho Admin Console → Email Authentication
+   DMARC: v=DMARC1; p=none; rua=mailto:noreply@dev2byroca.com
+   ```
+
+---
+
+## Crear productos en Stripe
+
+En Stripe Dashboard → **Products** → **Add product**:
+
+| Producto | Precio | Tipo | Variable .env |
+|----------|--------|------|---------------|
+| 10 créditos PsicoScreen | $199 MXN | One-time | `STRIPE_PRICE_CREDITS_10` |
+| 30 créditos PsicoScreen | $499 MXN | One-time | `STRIPE_PRICE_CREDITS_30` |
+| 100 créditos PsicoScreen | $1,499 MXN | One-time | `STRIPE_PRICE_CREDITS_100` |
+
+Configurar moneda como **MXN**: Stripe Dashboard → Settings → Business settings.
+
+---
+
+## Crear cuenta de administrador
+
+Regístrate como usuario normal en la app y luego promoverte a admin:
+
+```bash
+php artisan tinker
+>>> \App\Models\User::where('email','tu@correo.com')->update(['role' => 'admin']);
 ```
 
 ---
 
-## Comandos de mantenimiento
+## Checklist final antes de ir a producción
+
+- [ ] `APP_DEBUG=false` en `.env`
+- [ ] `APP_ENV=production` en `.env`
+- [ ] SSL activo y Force HTTPS habilitado
+- [ ] `.env` no accesible vía web: `curl https://app.dev2byroca.com/.env` debe retornar 404
+- [ ] Verificar email: `php artisan tinker` → `Mail::raw('test', fn($m) => $m->to('tu@correo.com')->subject('test'));`
+- [ ] Stripe en modo **live** (claves `pk_live_` / `sk_live_`)
+- [ ] Webhook de Stripe configurado y verificado (evento de prueba desde Dashboard)
+- [ ] Los 3 Cron Jobs activos
+- [ ] Backups automáticos de BD activados en cPanel
+- [ ] `SESSION_SECURE_COOKIE=true` con SSL activo
+
+---
+
+## Comandos de mantenimiento post-deploy
 
 ```bash
 # Ver jobs en cola
@@ -165,146 +235,15 @@ php artisan queue:failed
 # Reintentar jobs fallidos
 php artisan queue:retry all
 
-# Limpiar caché
-php artisan cache:clear
+# Limpiar caché tras cambios de código
+php artisan config:clear && php artisan cache:clear && php artisan view:clear
 
-# Entrar en modo mantenimiento
+# Modo mantenimiento
 php artisan down --render="errors.503"
-
-# Salir del modo mantenimiento
 php artisan up
+
+# Actualizar código (tras git pull)
+composer install --optimize-autoloader --no-dev
+php artisan migrate --force
+php artisan config:cache && php artisan route:cache && php artisan view:cache
 ```
-
----
-
-## Checklist de seguridad post-despliegue
-
-- [ ] `APP_DEBUG=false` en producción
-- [ ] `.env` no accesible vía web (verificar con `curl https://app.midominio.com/.env`)
-- [ ] Directorio `storage/` no accesible vía web
-- [ ] SSL activo (cPanel → SSL/TLS → Let's Encrypt)
-- [ ] `SESSION_ENCRYPT=true` en producción
-- [ ] Contraseña DB con al menos 16 caracteres y caracteres especiales
-- [ ] Copia de seguridad automática de BD en cPanel habilitada
-
----
-
-## Estructura de carpetas del proyecto
-
-```
-app/
-├── Exceptions/
-│   ├── InvalidTokenException.php   # Errores de token de paciente
-│   └── ScoringException.php        # Errores de cálculo de puntaje
-├── Http/
-│   └── Controllers/
-│       ├── Public/
-│       │   └── ScreeningController.php  # Rutas públicas del paciente
-│       └── Psychologist/
-│           ├── DashboardController.php
-│           ├── PatientController.php
-│           ├── ReportController.php
-│           └── ScreeningRequestController.php
-├── Jobs/
-│   └── SendScreeningEmailJob.php   # Job de cola para envío de email
-├── Mail/
-│   └── ScreeningInvitationMail.php
-├── Models/
-│   ├── Assessment.php
-│   ├── AssessmentOption.php
-│   ├── AssessmentQuestion.php
-│   ├── AssessmentResponse.php
-│   ├── AssessmentResponseAnswer.php
-│   ├── AssessmentRule.php
-│   ├── AuditLog.php
-│   ├── CreditsLedger.php
-│   ├── Patient.php
-│   ├── ReportExport.php
-│   ├── ScreeningRequest.php
-│   ├── ScreeningRequestItem.php
-│   ├── ScreeningToken.php
-│   ├── User.php
-│   └── UserProfile.php
-└── Services/
-    ├── CreditsService.php           # Libro mayor de créditos
-    ├── PdfExportService.php         # Generación de PDF con DomPDF
-    ├── ScreeningRequestService.php  # Orquestador de envío
-    ├── ScoringService.php           # Cálculo de puntaje e interpretación
-    └── TokenService.php             # Generación y validación de tokens
-
-database/
-├── migrations/                      # 14 migraciones en orden cronológico
-└── seeders/
-    ├── AssessmentSeeder.php         # PHQ-9 y GAD-7 con preguntas y reglas
-    └── DatabaseSeeder.php
-
-resources/views/
-├── emails/
-│   └── screening-invitation.blade.php
-├── pdf/
-│   └── screening-report.blade.php  # Plantilla del PDF
-└── public/screening/
-    ├── show.blade.php               # Formulario de tamizaje (móvil-friendly)
-    ├── completed.blade.php
-    └── invalid-token.blade.php
-
-tests/
-├── Feature/
-│   ├── PublicScreeningTest.php      # Flujo completo del paciente
-│   └── TokenServiceTest.php         # Seguridad de tokens
-└── Unit/
-    └── ScoringServiceTest.php       # PHQ-9 scoring y reglas
-```
-
----
-
-## Módulos del MVP
-
-| Módulo | Estado | Descripción |
-|--------|--------|-------------|
-| Auth (Breeze) | ✅ | Login/registro de psicólogas con Blade |
-| Gestión de pacientes | ✅ | CRUD con soft deletes |
-| Catálogo de pruebas | ✅ | PHQ-9, GAD-7 sembrados |
-| Envío de solicitudes | ✅ | Multi-prueba, créditos, email en cola |
-| Token seguro | ✅ | Hash SHA-256, expiración, no reuse |
-| Formulario paciente | ✅ | Móvil-friendly, sin cuenta |
-| Motor de scoring | ✅ | Configurable por reglas en DB |
-| Export PDF | ✅ | DomPDF + Blade, solo la dueña |
-| Créditos | ✅ | Libro mayor, recarga, consumo |
-| Auditoría | ✅ | IP, user-agent, eventos |
-| Panel admin | ⏳ | Siguiente iteración |
-| Stripe/pagos | ⏳ | Siguiente iteración |
-
----
-
-## Roadmap de implementación por pasos
-
-### Paso 1 — Base (completado en este MVP)
-- [x] Laravel 11 + Breeze + Blade
-- [x] Modelos y migraciones (14 tablas)
-- [x] Flujo de token seguro
-- [x] ScoringService con PHQ-9 y GAD-7
-- [x] PDF con DomPDF
-- [x] Colas con database driver (compatible cPanel)
-
-### Paso 2 — Créditos y pagos
-- [ ] Integrar Stripe Checkout para recarga de créditos
-- [ ] Webhook de Stripe para confirmar pagos
-- [ ] Panel de facturación de la psicóloga
-
-### Paso 3 — Panel admin interno
-- [ ] Gestión de usuarios y créditos
-- [ ] Visualización de audit logs
-- [ ] Gestión de pruebas/preguntas desde UI
-
-### Paso 4 — Mejoras UX
-- [ ] Recordatorios automáticos por email (scheduled tasks)
-- [ ] Dashboard con gráficas de evolución del paciente
-- [ ] Múltiples pruebas en un solo enlace (ya soportado en DB)
-- [ ] Firma electrónica del consentimiento informado
-
-### Paso 5 — Producción hardening
-- [ ] Backup automático en S3/Backblaze
-- [ ] Monitoreo de errores (Sentry o Flare)
-- [ ] Rate limiting avanzado por usuario
-- [ ] GDPR/LGPD compliance (retención y eliminación de datos)
