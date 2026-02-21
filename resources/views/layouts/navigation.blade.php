@@ -12,14 +12,44 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    @if(Auth::user()->role === 'admin')
+                        {{-- Admin nav --}}
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                            Panel Admin
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
+                            Usuarios
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.assessments.index')" :active="request()->routeIs('admin.assessments.*')">
+                            Pruebas
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.audit-logs.index')" :active="request()->routeIs('admin.audit-logs.*')">
+                            Audit Logs
+                        </x-nav-link>
+                    @else
+                        {{-- Psychologist nav --}}
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            Dashboard
+                        </x-nav-link>
+                        <x-nav-link :href="route('psychologist.patients.index')" :active="request()->routeIs('psychologist.patients.*')">
+                            Pacientes
+                        </x-nav-link>
+                        <x-nav-link :href="route('psychologist.screenings.index')" :active="request()->routeIs('psychologist.screenings.*')">
+                            Evaluaciones
+                        </x-nav-link>
+                        <x-nav-link :href="route('psychologist.billing.index')" :active="request()->routeIs('psychologist.billing.*')">
+                            Créditos
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                @if(Auth::user()->role === 'admin')
+                    <span class="text-xs font-bold bg-red-100 text-red-700 px-2 py-1 rounded me-3">ADMIN</span>
+                @endif
+
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -35,17 +65,21 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            Perfil
                         </x-dropdown-link>
+
+                        @if(Auth::user()->role !== 'admin')
+                            <x-dropdown-link :href="route('psychologist.billing.index')">
+                                Créditos disponibles: {{ Auth::user()->creditBalance() }}
+                            </x-dropdown-link>
+                        @endif
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
                             <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                    onclick="event.preventDefault(); this.closest('form').submit();">
+                                Cerrar sesión
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -67,9 +101,33 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            @if(Auth::user()->role === 'admin')
+                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                    Panel Admin
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
+                    Usuarios
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.assessments.index')" :active="request()->routeIs('admin.assessments.*')">
+                    Pruebas
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.audit-logs.index')" :active="request()->routeIs('admin.audit-logs.*')">
+                    Audit Logs
+                </x-responsive-nav-link>
+            @else
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    Dashboard
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('psychologist.patients.index')" :active="request()->routeIs('psychologist.patients.*')">
+                    Pacientes
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('psychologist.screenings.index')" :active="request()->routeIs('psychologist.screenings.*')">
+                    Evaluaciones
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('psychologist.billing.index')" :active="request()->routeIs('psychologist.billing.*')">
+                    Créditos
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
@@ -81,17 +139,15 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    Perfil
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
                     <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                            onclick="event.preventDefault(); this.closest('form').submit();">
+                        Cerrar sesión
                     </x-responsive-nav-link>
                 </form>
             </div>
