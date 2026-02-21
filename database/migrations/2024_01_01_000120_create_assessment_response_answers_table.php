@@ -23,7 +23,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->index(['assessment_response_id', 'assessment_question_id']);
+            $table->index(['assessment_response_id', 'assessment_question_id'], 'ara_response_question_idx');
         });
     }
 
