@@ -15,8 +15,7 @@
                         Descargar PDF
                     </a>
                 @elseif(!in_array($screening->status, ['completed', 'cancelled']))
-                    <form method="POST" action="{{ route('psychologist.screenings.resend', $screening) }}"
-                          onsubmit="return confirm('¿Reenviar el enlace al paciente?\n\nSe generará un enlace NUEVO y el enlace anterior dejará de funcionar. Si el paciente ya lo tiene abierto, no podrá continuar.')">
+                    <form method="POST" action="{{ route('psychologist.screenings.resend', $screening) }}">
                         @csrf
                         <button type="submit"
                                 class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg font-semibold text-sm hover:bg-gray-50 transition">
@@ -255,14 +254,6 @@
     }
 
     async function generateLink() {
-        // Si ya hay un enlace activo visible, pedir confirmación antes de invalidarlo
-        const container = document.getElementById('link-container');
-        if (!container.classList.contains('hidden')) {
-            if (!confirm('¿Generar un nuevo enlace?\n\nEl enlace actual dejará de funcionar inmediatamente. Si el paciente ya lo tiene abierto, no podrá completar la evaluación con ese enlace.')) {
-                return;
-            }
-        }
-
         const btn   = document.getElementById('get-link-btn');
         const label = document.getElementById('get-link-label');
         const orig  = label.textContent;

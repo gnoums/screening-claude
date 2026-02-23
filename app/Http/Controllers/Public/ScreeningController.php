@@ -34,10 +34,13 @@ class ScreeningController extends Controller
         try {
             $screeningToken = $this->tokenService->validate($token, $request);
         } catch (InvalidTokenException $e) {
-            return view('public.screening.invalid-token', [
-                'message' => $e->getMessage(),
-                'code'    => $e->getCode(),
-            ]);
+            return response()
+                ->view('public.screening.invalid-token', [
+                    'message' => $e->getMessage(),
+                    'code'    => $e->getCode(),
+                ])
+                ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+                ->header('Pragma', 'no-cache');
         }
 
         $screeningRequest = $screeningToken->screeningRequest->load([
@@ -55,12 +58,17 @@ class ScreeningController extends Controller
         // La prueba activa es el primer ítem pendiente
         $currentItem = $screeningRequest->items->first();
 
-        return view('public.screening.show', [
-            'screeningRequest' => $screeningRequest,
-            'currentItem'      => $currentItem,
-            'assessment'       => $currentItem->assessment,
-            'token'            => $token,
-        ]);
+        // Headers no-cache: evita que servidores intermedios (LiteSpeed, CDN)
+        // sirvan una versión cacheada del formulario con un token ya expirado.
+        return response()
+            ->view('public.screening.show', [
+                'screeningRequest' => $screeningRequest,
+                'currentItem'      => $currentItem,
+                'assessment'       => $currentItem->assessment,
+                'token'            => $token,
+            ])
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache');
     }
 
     /**
@@ -71,10 +79,23 @@ class ScreeningController extends Controller
         try {
             $screeningToken = $this->tokenService->validate($token, $request);
         } catch (InvalidTokenException $e) {
-            return view('public.screening.invalid-token', [
-                'message' => $e->getMessage(),
-                'code'    => $e->getCode(),
-            ]);
+            // Si el token solo está expirado (no invalidado ni ya usado), permitir
+            // el envío: el paciente abrió el formulario antes del vencimiento y
+            // tardó en completarlo (o hubo un desfase de caché/zona horaria).
+            $rawToken = ScreeningToken::findByPlainToken($token);
+
+            if ($rawToken && $rawToken->isExpired() && ! $rawToken->is_invalidated && ! $rawToken->hasBeenUsed()) {
+                $screeningToken = $rawToken;
+                $rawToken->update([
+                    'last_ip'         => $request->ip(),
+                    'last_user_agent' => $request->userAgent(),
+                ]);
+            } else {
+                return view('public.screening.invalid-token', [
+                    'message' => $e->getMessage(),
+                    'code'    => $e->getCode(),
+                ]);
+            }
         }
 
         $screeningRequest = $screeningToken->screeningRequest->load([
