@@ -111,19 +111,27 @@ class ScreeningRequestController extends Controller
         ['plain' => $plainToken] = $this->tokenService->generate($screening);
         $url = $this->tokenService->generateUrl($plainToken);
 
+        $emailSent  = false;
+        $emailError = null;
+
         try {
             \App\Jobs\SendScreeningEmailJob::dispatchSync($screening->id, $url, $screening->recipient_email);
-            $message = 'Enlace de acceso re-enviado al paciente.';
+            $emailSent = true;
         } catch (\Throwable $e) {
+            $emailError = $e->getMessage();
             \Illuminate\Support\Facades\Log::error('No se pudo reenviar el email de tamizaje', [
                 'screening_request_id' => $screening->id,
-                'error'                => $e->getMessage(),
+                'error'                => $emailError,
             ]);
-            $message = 'No se pudo enviar el email, pero aquí tienes el enlace para compartirlo manualmente.';
         }
 
+        $flash = $emailSent
+            ? ['success' => 'Enlace de acceso re-enviado al paciente.']
+            : ['warning' => 'No se pudo enviar el correo: ' . ($emailError ?? 'error desconocido')
+                . '. Aquí tienes el enlace para compartirlo manualmente.'];
+
         return back()
-            ->with('success', $message)
+            ->with($flash)
             ->with('access_url', $url);
     }
 

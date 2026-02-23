@@ -10,6 +10,7 @@ use App\Services\ScoringService;
 use App\Services\TokenService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 /**
@@ -29,7 +30,7 @@ class ScreeningController extends Controller
     /**
      * Muestra el formulario de tamizaje al paciente.
      */
-    public function show(string $token, Request $request): View|RedirectResponse
+    public function show(string $token, Request $request): Response|RedirectResponse
     {
         try {
             $screeningToken = $this->tokenService->validate($token, $request);
