@@ -1,7 +1,11 @@
-<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" {{ $attributes->merge(['class' => 'block h-9 w-auto']) }}>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 252 66" {{ $attributes->merge(['class' => 'block h-9 w-auto']) }}>
     <defs>
         <style>
-  </defs>
+            .cls-1{fill:#5a7123}
+            .cls-2{fill:#374151}
+            .cls-3{fill:#8eaa44}
+        </style>
+    </defs>
   <g id="Layer_1-2" data-name="Layer 1">
     <path class="cls-2" d="M115.07.2v1.43c1.35-.9,2.97-1.43,4.72-1.43,4.7,0,8.5,3.81,8.5,8.5s-3.81,8.5-8.5,8.5c-1.75,0-3.37-.53-4.72-1.43v8.76h-3.78V.2h3.78ZM119.79,13.42c2.61,0,4.72-2.11,4.72-4.72s-2.11-4.72-4.72-4.72-4.72,2.11-4.72,4.72,2.11,4.72,4.72,4.72"/>
     <path class="cls-2" d="M138.46.2c2.87,0,5.2,2.33,5.2,5.2h-3.78c0-.78-.63-1.41-1.41-1.41-2.61,0-4.72,2.11-4.72,4.72v8.5h-3.78V.2h3.78v1.43c1.35-.9,2.97-1.43,4.72-1.43"/>
