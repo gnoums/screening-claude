@@ -54,13 +54,13 @@
                 <div class="flex items-center text-xs gap-0.5">
                     <a href="{{ route('language.switch', 'en') }}"
                        class="px-1.5 py-0.5 rounded transition
-                              {{ app()->getLocale() === 'en' ? 'font-bold text-blue-600 bg-blue-50' : 'text-gray-400 hover:text-gray-600' }}">
+                              {{ app()->getLocale() === 'en' ? 'font-bold text-primary-600 bg-primary-50' : 'text-gray-400 hover:text-gray-600' }}">
                         EN
                     </a>
                     <span class="text-gray-300">|</span>
                     <a href="{{ route('language.switch', 'es') }}"
                        class="px-1.5 py-0.5 rounded transition
-                              {{ app()->getLocale() === 'es' ? 'font-bold text-blue-600 bg-blue-50' : 'text-gray-400 hover:text-gray-600' }}">
+                              {{ app()->getLocale() === 'es' ? 'font-bold text-primary-600 bg-primary-50' : 'text-gray-400 hover:text-gray-600' }}">
                         ES
                     </a>
                 </div>
@@ -162,12 +162,12 @@
                     <span class="text-sm text-gray-500">{{ __('Language') }}:</span>
                     <a href="{{ route('language.switch', 'en') }}"
                        class="text-xs px-2 py-0.5 rounded border transition
-                              {{ app()->getLocale() === 'en' ? 'font-bold text-blue-600 border-blue-300 bg-blue-50' : 'text-gray-400 border-gray-200 hover:text-gray-600' }}">
+                              {{ app()->getLocale() === 'en' ? 'font-bold text-primary-600 border-primary-300 bg-primary-50' : 'text-gray-400 border-gray-200 hover:text-gray-600' }}">
                         EN
                     </a>
                     <a href="{{ route('language.switch', 'es') }}"
                        class="text-xs px-2 py-0.5 rounded border transition
-                              {{ app()->getLocale() === 'es' ? 'font-bold text-blue-600 border-blue-300 bg-blue-50' : 'text-gray-400 border-gray-200 hover:text-gray-600' }}">
+                              {{ app()->getLocale() === 'es' ? 'font-bold text-primary-600 border-primary-300 bg-primary-50' : 'text-gray-400 border-gray-200 hover:text-gray-600' }}">
                         ES
                     </a>
                 </div>

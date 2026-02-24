@@ -4,7 +4,7 @@
             <a href="{{ route('admin.assessments.index') }}" class="text-gray-400 hover:text-gray-600">← Pruebas</a>
             <h2 class="font-semibold text-xl text-gray-800">{{ $assessment->name }}</h2>
             <a href="{{ route('admin.assessments.edit', $assessment) }}"
-               class="text-sm text-blue-600 hover:underline">Editar info</a>
+               class="text-sm text-primary-600 hover:underline">Editar info</a>
         </div>
     </x-slot>
 
@@ -51,7 +51,7 @@
                                 <div class="flex items-center justify-between text-xs text-gray-600 bg-gray-50 rounded px-3 py-1">
                                     <span>{{ $option->option_text }}</span>
                                     <div class="flex items-center gap-3">
-                                        <span class="font-semibold text-blue-600">+{{ $option->score_value }} pts</span>
+                                        <span class="font-semibold text-primary-600">+{{ $option->score_value }} pts</span>
                                         <form method="POST" action="{{ route('admin.assessments.options.destroy', $option) }}"
                                               onsubmit="return confirm('¿Eliminar opción?')">
                                             @csrf @method('DELETE')
@@ -89,7 +89,7 @@
                             <input type="text" name="question_code" placeholder="Código (ej: PHQ1)"
                                    class="w-28 border border-gray-300 rounded-lg px-3 py-2 text-sm">
                             <button type="submit"
-                                    class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
+                                    class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700">
                                 + Pregunta
                             </button>
                         </div>
@@ -141,7 +141,7 @@
                         <textarea name="interpretation_text" placeholder="Texto de interpretación clínica" required
                                   class="col-span-2 border border-gray-300 rounded-lg px-3 py-2 text-sm" rows="2"></textarea>
                         <button type="submit"
-                                class="col-span-2 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
+                                class="col-span-2 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700">
                             + Añadir regla
                         </button>
                     </form>

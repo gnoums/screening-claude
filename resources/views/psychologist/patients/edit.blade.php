@@ -61,7 +61,7 @@
                         <div>
                             <x-input-label for="sex" :value="__('Sex')" />
                             <select id="sex" name="sex"
-                                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+                                class="mt-1 block w-full border-gray-300 focus:border-primary-500 focus:ring-primary-500 rounded-md shadow-sm text-sm">
                                 <option value="">{{ __('— Select —') }}</option>
                                 @foreach([
                                     'male'              => __('Male'),
@@ -81,7 +81,7 @@
                     <div>
                         <x-input-label for="notes" :value="__('Clinical notes')" />
                         <textarea id="notes" name="notes" rows="4"
-                            class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">{{ old('notes', $patient->notes) }}</textarea>
+                            class="mt-1 block w-full border-gray-300 focus:border-primary-500 focus:ring-primary-500 rounded-md shadow-sm text-sm">{{ old('notes', $patient->notes) }}</textarea>
                         <x-input-error :messages="$errors->get('notes')" class="mt-1" />
                     </div>
 

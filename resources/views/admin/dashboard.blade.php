@@ -16,7 +16,7 @@
                     <div class="text-sm text-gray-500 mt-1">Psicólogas registradas</div>
                 </div>
                 <div class="bg-white rounded-xl shadow p-5 text-center">
-                    <div class="text-3xl font-bold text-blue-600">{{ $stats['active_users'] }}</div>
+                    <div class="text-3xl font-bold text-primary-600">{{ $stats['active_users'] }}</div>
                     <div class="text-sm text-gray-500 mt-1">Activas este mes</div>
                 </div>
                 <div class="bg-white rounded-xl shadow p-5 text-center">
@@ -74,7 +74,7 @@
                 <div class="bg-white rounded-xl shadow overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
                         <span class="font-semibold text-gray-800">Actividad reciente</span>
-                        <a href="{{ route('admin.audit-logs.index') }}" class="text-xs text-blue-600 hover:underline">Ver todo</a>
+                        <a href="{{ route('admin.audit-logs.index') }}" class="text-xs text-primary-600 hover:underline">Ver todo</a>
                     </div>
                     @forelse($stats['recent_audit_logs'] as $log)
                         <div class="px-6 py-2 border-b border-gray-50 flex justify-between items-center">

@@ -10,7 +10,7 @@
             </div>
             <div class="flex items-center gap-2">
                 <a href="{{ route('psychologist.screenings.create', ['patient_id' => $patient->id]) }}"
-                   class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold text-sm hover:bg-blue-700 transition">
+                   class="px-4 py-2 bg-primary-600 text-white rounded-lg font-semibold text-sm hover:bg-primary-700 transition">
                     {{ __('+ New Screening') }}
                 </a>
                 <a href="{{ route('psychologist.patients.edit', $patient) }}"
@@ -90,7 +90,7 @@
                         $badges = [
                             'draft'               => ['bg-gray-100 text-gray-600',    __('Draft')],
                             'sent'                => ['bg-yellow-100 text-yellow-700', __('Sent')],
-                            'partially_completed' => ['bg-blue-100 text-blue-700',    __('In Progress')],
+                            'partially_completed' => ['bg-primary-100 text-primary-700',    __('In Progress')],
                             'completed'           => ['bg-green-100 text-green-700',  __('Completed')],
                             'expired'             => ['bg-red-100 text-red-600',      __('Expired')],
                             'cancelled'           => ['bg-gray-100 text-gray-500',    __('Cancelled')],
@@ -112,7 +112,7 @@
                                 {{ $label }}
                             </span>
                             <a href="{{ route('psychologist.screenings.show', $req) }}"
-                               class="text-blue-600 text-sm hover:underline">
+                               class="text-primary-600 text-sm hover:underline">
                                 {{ __('View →') }}
                             </a>
                         </div>

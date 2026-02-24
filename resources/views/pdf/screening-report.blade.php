@@ -13,17 +13,17 @@
         line-height: 1.5;
     }
     .header {
-        border-bottom: 3px solid #4a6fa5;
+        border-bottom: 3px solid #5a7123;
         padding-bottom: 16px;
         margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
     }
-    .app-name { font-size: 20px; font-weight: bold; color: #4a6fa5; }
+    .app-name { font-size: 20px; font-weight: bold; color: #5a7123; }
     .psychologist-block { text-align: right; font-size: 10px; color: #555; }
     .section-title {
-        background: #4a6fa5;
+        background: #5a7123;
         color: white;
         padding: 5px 10px;
         font-size: 12px;
@@ -33,7 +33,7 @@
     }
     table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
     th {
-        background: #e8eef7;
+        background: #e6edcf;
         padding: 6px 10px;
         text-align: left;
         font-size: 10px;
@@ -81,7 +81,7 @@
 {{-- ENCABEZADO --}}
 <div class="header">
     <div>
-        <div class="app-name">PsicoScreen</div>
+        <div class="app-name">{{ config('app.name') }}</div>
         <div style="font-size:10px;color:#777;margin-top:2px;">Reporte de Tamizaje Psicológico</div>
     </div>
     <div class="psychologist-block">
@@ -208,7 +208,7 @@
 
 {{-- PIE DE PÁGINA --}}
 <div class="footer">
-    Generado por PsicoScreen · {{ $generatedAt->format('d/m/Y H:i') }} ·
+    Generado por {{ config('app.name') }} · {{ $generatedAt->format('d/m/Y H:i') }} ·
     Reporte ID: {{ $request->id }}
 </div>
 

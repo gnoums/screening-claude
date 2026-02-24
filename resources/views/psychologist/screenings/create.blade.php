@@ -28,13 +28,13 @@
                         @if($patients->isEmpty())
                             <p class="mt-1 text-sm text-gray-500">
                                 {{ __('No patients registered.') }}
-                                <a href="{{ route('psychologist.patients.create') }}" class="text-blue-600 hover:underline">
+                                <a href="{{ route('psychologist.patients.create') }}" class="text-primary-600 hover:underline">
                                     {{ __('Create a patient') }}
                                 </a>
                             </p>
                         @else
                             <select id="patient_id" name="patient_id" required
-                                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+                                class="mt-1 block w-full border-gray-300 focus:border-primary-500 focus:ring-primary-500 rounded-md shadow-sm text-sm">
                                 <option value="">{{ __('— Select patient —') }}</option>
                                 @foreach($patients as $patient)
                                     <option value="{{ $patient->id }}"
@@ -61,7 +61,7 @@
                                                name="assessment_ids[]"
                                                value="{{ $assessment->id }}"
                                                {{ in_array($assessment->id, old('assessment_ids', [])) ? 'checked' : '' }}
-                                               class="mt-0.5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                               class="mt-0.5 rounded border-gray-300 text-primary-600 focus:ring-primary-500">
                                         <div>
                                             <div class="text-sm font-medium text-gray-800">{{ $assessment->name }}</div>
                                             @if($assessment->description)
@@ -92,7 +92,7 @@
                         <x-input-label for="message_to_patient" :value="__('Message for patient (optional)')" />
                         <textarea id="message_to_patient" name="message_to_patient" rows="3"
                             placeholder="Hi, here is the link to complete your assessment…"
-                            class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">{{ old('message_to_patient') }}</textarea>
+                            class="mt-1 block w-full border-gray-300 focus:border-primary-500 focus:ring-primary-500 rounded-md shadow-sm text-sm">{{ old('message_to_patient') }}</textarea>
                         <x-input-error :messages="$errors->get('message_to_patient')" class="mt-1" />
                     </div>
 

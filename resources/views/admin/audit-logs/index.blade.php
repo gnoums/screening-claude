@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-span-2 md:col-span-4 flex gap-2">
                     <button type="submit"
-                            class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition">
+                            class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition">
                         Filtrar
                     </button>
                     <a href="{{ route('admin.audit-logs.index') }}"
@@ -87,7 +87,7 @@
                                 <td class="px-4 py-3 text-xs">
                                     @if($log->metadata)
                                         <details>
-                                            <summary class="cursor-pointer text-blue-600 hover:underline">Ver</summary>
+                                            <summary class="cursor-pointer text-primary-600 hover:underline">Ver</summary>
                                             <pre class="mt-1 text-xs bg-gray-100 rounded p-2 overflow-auto max-w-xs">{{ json_encode($log->metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
                                         </details>
                                     @else

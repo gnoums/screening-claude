@@ -7,7 +7,7 @@
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
             {{-- Current balance --}}
-            <div class="bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl shadow-lg p-6 text-white flex items-center justify-between">
+            <div class="bg-gradient-to-r from-primary-600 to-primary-400 rounded-2xl shadow-lg p-6 text-white flex items-center justify-between">
                 <div>
                     <div class="text-sm font-medium opacity-80">{{ __('Available balance') }}</div>
                     <div class="text-5xl font-bold mt-1">{{ $creditBalance }}</div>
@@ -28,14 +28,14 @@
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ __('Recharge credits') }}</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     @foreach($packages as $key => $package)
-                        <div class="bg-white rounded-xl shadow border-2 {{ $package['popular'] ? 'border-blue-500' : 'border-gray-100' }} p-5 relative">
+                        <div class="bg-white rounded-xl shadow border-2 {{ $package['popular'] ? 'border-primary-500' : 'border-gray-100' }} p-5 relative">
                             @if($package['popular'])
-                                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary-500 text-white text-xs font-bold px-3 py-1 rounded-full">
                                     {{ __('MOST POPULAR') }}
                                 </div>
                             @endif
                             <div class="text-2xl font-bold text-gray-800">{{ $package['label'] }}</div>
-                            <div class="text-3xl font-bold text-blue-600 mt-2">
+                            <div class="text-3xl font-bold text-primary-600 mt-2">
                                 ${{ number_format($package['amount_mxn']) }}
                                 <span class="text-sm font-normal text-gray-500">MXN</span>
                             </div>
@@ -48,7 +48,7 @@
                                 @csrf
                                 <input type="hidden" name="package" value="{{ $key }}">
                                 <button type="submit"
-                                        class="w-full py-2 px-4 {{ $package['popular'] ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-800 hover:bg-gray-900' }} text-white font-semibold rounded-lg transition">
+                                        class="w-full py-2 px-4 {{ $package['popular'] ? 'bg-primary-600 hover:bg-primary-700' : 'bg-gray-800 hover:bg-gray-900' }} text-white font-semibold rounded-lg transition">
                                     {{ __('Buy →') }}
                                 </button>
                             </form>

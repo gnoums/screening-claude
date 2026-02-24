@@ -25,14 +25,14 @@
                     <div class="text-xs text-gray-500 uppercase font-semibold">Rol</div>
                     <div class="mt-1">
                         <span class="text-xs font-semibold px-2 py-1 rounded-full
-                            {{ $user->role === 'admin' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700' }}">
+                            {{ $user->role === 'admin' ? 'bg-red-100 text-red-700' : 'bg-primary-100 text-primary-700' }}">
                             {{ $user->role }}
                         </span>
                     </div>
                 </div>
                 <div class="text-center">
                     <div class="text-xs text-gray-500 uppercase font-semibold">Créditos</div>
-                    <div class="text-2xl font-bold text-blue-600 mt-1">{{ $stats['credit_balance'] }}</div>
+                    <div class="text-2xl font-bold text-primary-600 mt-1">{{ $stats['credit_balance'] }}</div>
                 </div>
                 <div class="text-center">
                     <div class="text-xs text-gray-500 uppercase font-semibold">Evaluaciones</div>
@@ -53,17 +53,17 @@
                                     Cantidad (positivo = agregar, negativo = descontar)
                                 </label>
                                 <input type="number" name="amount"
-                                       class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                       class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
                                        placeholder="Ej: 10 o -5" required>
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">Motivo</label>
                                 <input type="text" name="description"
-                                       class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                       class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
                                        placeholder="Ej: Bonificación por error del sistema" required>
                             </div>
                             <button type="submit"
-                                    class="w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">
+                                    class="w-full py-2 bg-primary-600 text-white rounded-lg text-sm font-semibold hover:bg-primary-700 transition">
                                 Aplicar ajuste
                             </button>
                         </div>
@@ -77,7 +77,7 @@
                         @csrf
                         @method('PATCH')
                         <div class="space-y-3">
-                            <select name="role" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <select name="role" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none">
                                 <option value="psychologist" {{ $user->role === 'psychologist' ? 'selected' : '' }}>
                                     Psicóloga
                                 </option>

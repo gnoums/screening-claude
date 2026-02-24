@@ -5,7 +5,7 @@
                 {{ __('Patients') }}
             </h2>
             <a href="{{ route('psychologist.patients.create') }}"
-               class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold text-sm hover:bg-blue-700 transition">
+               class="px-4 py-2 bg-primary-600 text-white rounded-lg font-semibold text-sm hover:bg-primary-700 transition">
                 {{ __('+ New Patient') }}
             </a>
         </div>
@@ -25,7 +25,7 @@
                 <div class="flex gap-2">
                     <input type="text" name="search" value="{{ request('search') }}"
                            placeholder="{{ __('Search by name or email…') }}"
-                           class="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-blue-500 focus:border-blue-500">
+                           class="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-primary-500 focus:border-primary-500">
                     <button type="submit"
                             class="px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-200 transition">
                         {{ __('Search') }}
@@ -57,7 +57,7 @@
                                 {{ __(':count screenings', ['count' => $patient->screeningRequests()->count()]) }}
                             </span>
                             <a href="{{ route('psychologist.patients.show', $patient) }}"
-                               class="text-blue-600 text-sm hover:underline">
+                               class="text-primary-600 text-sm hover:underline">
                                 {{ __('View →') }}
                             </a>
                         </div>
@@ -68,7 +68,7 @@
                             {{ __('No patients found with that search term.') }}
                         @else
                             {{ __("You haven't registered any patients yet.") }}
-                            <a href="{{ route('psychologist.patients.create') }}" class="text-blue-600 hover:underline ml-1">
+                            <a href="{{ route('psychologist.patients.create') }}" class="text-primary-600 hover:underline ml-1">
                                 {{ __('Create the first patient') }}
                             </a>
                         @endif

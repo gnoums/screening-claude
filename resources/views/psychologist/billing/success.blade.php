@@ -10,9 +10,9 @@
             <p class="text-gray-600 mb-6">
                 {{ __('Your credits will be credited in seconds. If they don\'t appear immediately, wait a moment and refresh the page.') }}
             </p>
-            <div class="bg-blue-50 rounded-xl p-4 mb-6">
-                <div class="text-sm text-blue-600">{{ __('Current balance') }}</div>
-                <div class="text-3xl font-bold text-blue-700 mt-1">{{ $creditBalance }} {{ __('credits') }}</div>
+            <div class="bg-primary-50 rounded-xl p-4 mb-6">
+                <div class="text-sm text-primary-600">{{ __('Current balance') }}</div>
+                <div class="text-3xl font-bold text-primary-700 mt-1">{{ $creditBalance }} {{ __('credits') }}</div>
             </div>
             <div class="flex gap-3 justify-center">
                 <a href="{{ route('psychologist.billing.index') }}"
@@ -20,7 +20,7 @@
                     {{ __('View billing') }}
                 </a>
                 <a href="{{ route('psychologist.screenings.create') }}"
-                   class="px-5 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+                   class="px-5 py-2 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition">
                     {{ __('Send screening →') }}
                 </a>
             </div>

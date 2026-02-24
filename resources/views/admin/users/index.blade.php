@@ -10,9 +10,9 @@
             <form method="GET" class="mb-6 flex gap-3">
                 <input type="text" name="search" value="{{ request('search') }}"
                        placeholder="Buscar por nombre o email…"
-                       class="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                       class="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
                 <button type="submit"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition">
+                        class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition">
                     Buscar
                 </button>
                 @if(request('search'))
@@ -44,7 +44,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="text-xs font-semibold px-2 py-1 rounded-full
-                                        {{ $user->role === 'admin' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700' }}">
+                                        {{ $user->role === 'admin' ? 'bg-red-100 text-red-700' : 'bg-primary-100 text-primary-700' }}">
                                         {{ $user->role }}
                                     </span>
                                 </td>
@@ -53,7 +53,7 @@
                                 <td class="px-6 py-4 text-sm text-gray-500">{{ $user->created_at->format('d/m/Y') }}</td>
                                 <td class="px-6 py-4 text-right">
                                     <a href="{{ route('admin.users.show', $user) }}"
-                                       class="text-blue-600 text-sm hover:underline">Ver →</a>
+                                       class="text-primary-600 text-sm hover:underline">Ver →</a>
                                 </td>
                             </tr>
                         @empty

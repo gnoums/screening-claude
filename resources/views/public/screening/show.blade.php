@@ -8,7 +8,7 @@
         *, *::before, *::after { box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f0f4f8; color: #1a202c; margin: 0; padding: 20px;
+            background: #f4f7ee; color: #1a202c; margin: 0; padding: 20px;
         }
         .card {
             max-width: 680px; margin: 0 auto; background: #fff;
@@ -17,10 +17,10 @@
         }
         .lang-switch { text-align: right; margin-bottom: 12px; font-size: .75rem; }
         .lang-switch a { color: #718096; text-decoration: none; padding: 2px 6px; border-radius: 4px; }
-        .lang-switch a.active { font-weight: bold; color: #4a6fa5; background: #ebf4ff; }
-        .lang-switch a:hover { color: #4a6fa5; }
+        .lang-switch a.active { font-weight: bold; color: #5a7123; background: #f4f7ee; }
+        .lang-switch a:hover { color: #5a7123; }
         .progress-bar-bg { background: #e2e8f0; border-radius: 99px; height: 8px; margin: 12px 0 24px; }
-        .progress-bar-fill { background: #4a6fa5; height: 8px; border-radius: 99px; transition: width .3s; }
+        .progress-bar-fill { background: #5a7123; height: 8px; border-radius: 99px; transition: width .3s; }
         h1 { font-size: 1.4rem; color: #2d3748; margin-bottom: 4px; }
         .subtitle { font-size: .9rem; color: #718096; margin-bottom: 24px; }
         .question-block { border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
@@ -31,15 +31,15 @@
             border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer;
             transition: border-color .15s, background .15s;
         }
-        .option-label:hover { border-color: #4a6fa5; background: #ebf4ff; }
-        input[type="radio"]:checked + .option-label { border-color: #4a6fa5; background: #ebf4ff; }
+        .option-label:hover { border-color: #5a7123; background: #f4f7ee; }
+        input[type="radio"]:checked + .option-label { border-color: #5a7123; background: #f4f7ee; }
         input[type="radio"] { display: none; }
         .btn-submit {
-            width: 100%; padding: 14px; background: #4a6fa5; color: #fff;
+            width: 100%; padding: 14px; background: #5a7123; color: #fff;
             border: none; border-radius: 8px; font-size: 1rem; font-weight: bold;
             cursor: pointer; margin-top: 16px;
         }
-        .btn-submit:hover { background: #3a5a8a; }
+        .btn-submit:hover { background: #45581c; }
         .error-msg { background: #fed7d7; color: #c53030; padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; }
         .psychologist-note { font-size: .8rem; color: #a0aec0; text-align: center; margin-top: 24px; }
         @media (max-width: 480px) { .card { padding: 20px; } }

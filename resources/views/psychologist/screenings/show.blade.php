@@ -62,9 +62,9 @@
                 <div id="link-container" class="{{ session('access_url') ? '' : 'hidden' }} flex flex-col sm:flex-row gap-2 mb-3">
                     <input id="access-url-input" type="text" readonly
                            value="{{ session('access_url', '') }}"
-                           class="flex-1 text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-700 select-all focus:outline-none focus:ring-2 focus:ring-blue-300"/>
+                           class="flex-1 text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-gray-700 select-all focus:outline-none focus:ring-2 focus:ring-primary-300"/>
                     <button onclick="copyLink()"
-                            class="flex items-center justify-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition shrink-0">
+                            class="flex items-center justify-center gap-1.5 px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-semibold hover:bg-primary-700 transition shrink-0">
                         <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                         </svg>
@@ -102,7 +102,7 @@
                     $badges = [
                         'draft'               => ['bg-gray-100 text-gray-600',    __('Draft')],
                         'sent'                => ['bg-yellow-100 text-yellow-700', __('Sent')],
-                        'partially_completed' => ['bg-blue-100 text-blue-700',    __('In Progress')],
+                        'partially_completed' => ['bg-primary-100 text-primary-700',    __('In Progress')],
                         'completed'           => ['bg-green-100 text-green-700',  __('Completed')],
                         'expired'             => ['bg-red-100 text-red-600',      __('Expired')],
                         'cancelled'           => ['bg-gray-100 text-gray-500',    __('Cancelled')],
@@ -120,7 +120,7 @@
                         <dt class="text-gray-500">{{ __('Patient') }}</dt>
                         <dd class="text-gray-800 mt-0.5">
                             <a href="{{ route('psychologist.patients.show', $screening->patient) }}"
-                               class="text-blue-600 hover:underline">
+                               class="text-primary-600 hover:underline">
                                 {{ $screening->patient->full_name }}
                             </a>
                         </dd>
@@ -171,14 +171,14 @@
                             {{-- Score and interpretation --}}
                             <div class="flex items-center gap-6 mb-4">
                                 <div class="text-center">
-                                    <div class="text-3xl font-bold text-blue-600">
+                                    <div class="text-3xl font-bold text-primary-600">
                                         {{ $item->response->total_score }}
                                     </div>
                                     <div class="text-xs text-gray-500 mt-0.5">{{ __('Total score') }}</div>
                                 </div>
                                 @if($item->response->interpretation)
-                                    <div class="flex-1 px-4 py-3 bg-blue-50 rounded-lg">
-                                        <div class="text-sm font-semibold text-blue-800">
+                                    <div class="flex-1 px-4 py-3 bg-primary-50 rounded-lg">
+                                        <div class="text-sm font-semibold text-primary-800">
                                             {{ $item->response->interpretation }}
                                         </div>
                                     </div>

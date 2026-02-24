@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Pruebas de Tamizaje</h2>
             <a href="{{ route('admin.assessments.create') }}"
-               class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">
+               class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-semibold hover:bg-primary-700 transition">
                 + Nueva prueba
             </a>
         </div>
@@ -43,7 +43,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <a href="{{ route('admin.assessments.show', $assessment) }}"
-                                       class="text-blue-600 text-sm hover:underline">Gestionar →</a>
+                                       class="text-primary-600 text-sm hover:underline">Gestionar →</a>
                                 </td>
                             </tr>
                         @endforeach
