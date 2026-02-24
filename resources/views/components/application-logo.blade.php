@@ -1,4 +1,4 @@
-<svg viewBox="0 0 220 44" xmlns="http://www.w3.org/2000/svg" {{ $attributes->except('class') }}>
+<svg viewBox="0 0 220 44" xmlns="http://www.w3.org/2000/svg" {{ $attributes->merge(['class' => 'block h-9 w-auto']) }}>
     {{-- Manta ray body --}}
     <path style="fill:#5a7123" d="M44,22 C37,10 22,5 6,13 L0,22 L6,31 C22,39 37,34 44,22Z"/>
     {{-- Upper wing --}}
