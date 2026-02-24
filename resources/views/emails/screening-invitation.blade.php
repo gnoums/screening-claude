@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
 <meta charset="UTF-8">
 <style>
@@ -24,11 +24,11 @@
     </div>
 
     <div class="body">
-        <p>Hola,</p>
+        <p>{{ __('Hi,') }}</p>
 
         <p>
-            <strong>{{ $request->user->name }}</strong> te ha enviado una evaluación psicológica
-            para que la completes en línea de manera confidencial.
+            <strong>{{ $request->user->name }}</strong>
+            {{ __('has sent you a psychological assessment to complete online in a confidential manner.') }}
         </p>
 
         @if($request->message_to_patient)
@@ -37,37 +37,34 @@
             </p>
         @endif
 
-        <p><strong>Prueba(s) incluidas:</strong></p>
+        <p><strong>{{ __('Tests included:') }}</strong></p>
         <ul>
             @foreach($request->items as $item)
                 <li>{{ $item->assessment->name }}
                     @if($item->assessment->estimated_minutes)
-                        (aprox. {{ $item->assessment->estimated_minutes }} minutos)
+                        ({{ __('approx. :minutes minutes', ['minutes' => $item->assessment->estimated_minutes]) }})
                     @endif
                 </li>
             @endforeach
         </ul>
 
-        <p>Para responder, haz clic en el botón:</p>
+        <p>{{ __('To respond, click the button:') }}</p>
 
-        <a href="{{ $accessUrl }}" class="btn">Iniciar evaluación</a>
+        <a href="{{ $accessUrl }}" class="btn">{{ __('Start assessment') }}</a>
 
         <p style="font-size:12px;color:#888;">
-            O copia y pega este enlace en tu navegador:<br>
+            {{ __('Or copy and paste this link in your browser:') }}<br>
             <span style="color:#4a6fa5;word-break:break-all;">{{ $accessUrl }}</span>
         </p>
 
         <div class="warning">
-            <strong>Nota de privacidad:</strong>
-            Este enlace es personal e intransferible.
-            Expira en {{ config('screening.token_ttl_hours') }} horas y
-            solo puede usarse una vez. No lo compartas con nadie.
+            <strong>{{ __('Privacy note:') }}</strong>
+            {{ __('This link is personal and non-transferable. It expires in :hours hours and can only be used once. Do not share it with anyone.', ['hours' => config('screening.token_ttl_hours')]) }}
         </div>
     </div>
 
     <div class="footer">
-        PsicoScreen · Sistema de Tamizaje Psicológico ·
-        Si no esperabas este correo, puedes ignorarlo.
+        {{ __('PsicoScreen · Psychological Screening System · If you were not expecting this email, you may ignore it.') }}
     </div>
 
 </div>

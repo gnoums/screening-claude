@@ -2,9 +2,9 @@
     <x-slot name="header">
         <div class="flex items-center gap-3">
             <a href="{{ route('psychologist.screenings.index') }}"
-               class="text-gray-400 hover:text-gray-600 text-sm">← Evaluaciones</a>
+               class="text-gray-400 hover:text-gray-600 text-sm">{{ __('← Screenings') }}</a>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Nueva evaluación
+                {{ __('New Screening') }}
             </h2>
         </div>
     </x-slot>
@@ -22,20 +22,20 @@
                 <form method="POST" action="{{ route('psychologist.screenings.store') }}" class="space-y-6">
                     @csrf
 
-                    {{-- Paciente --}}
+                    {{-- Patient --}}
                     <div>
-                        <x-input-label for="patient_id" :value="__('Paciente')" />
+                        <x-input-label for="patient_id" :value="__('Patient')" />
                         @if($patients->isEmpty())
                             <p class="mt-1 text-sm text-gray-500">
-                                No tienes pacientes registrados.
+                                {{ __('No patients registered.') }}
                                 <a href="{{ route('psychologist.patients.create') }}" class="text-blue-600 hover:underline">
-                                    Crear un paciente
+                                    {{ __('Create a patient') }}
                                 </a>
                             </p>
                         @else
                             <select id="patient_id" name="patient_id" required
                                 class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
-                                <option value="">— Seleccionar paciente —</option>
+                                <option value="">{{ __('— Select patient —') }}</option>
                                 @foreach($patients as $patient)
                                     <option value="{{ $patient->id }}"
                                         {{ old('patient_id', request('patient_id')) == $patient->id ? 'selected' : '' }}>
@@ -47,12 +47,12 @@
                         <x-input-error :messages="$errors->get('patient_id')" class="mt-1" />
                     </div>
 
-                    {{-- Pruebas de tamizaje --}}
+                    {{-- Assessments --}}
                     <div>
-                        <x-input-label :value="__('Pruebas a aplicar')" />
-                        <p class="text-xs text-gray-400 mb-2">Selecciona una o más pruebas</p>
+                        <x-input-label :value="__('Assessments to apply')" />
+                        <p class="text-xs text-gray-400 mb-2">{{ __('Select one or more assessments') }}</p>
                         @if($assessments->isEmpty())
-                            <p class="text-sm text-gray-500">No hay pruebas disponibles.</p>
+                            <p class="text-sm text-gray-500">{{ __('No assessments available.') }}</p>
                         @else
                             <div class="space-y-2">
                                 @foreach($assessments as $assessment)
@@ -75,23 +75,23 @@
                         <x-input-error :messages="$errors->get('assessment_ids')" class="mt-1" />
                     </div>
 
-                    {{-- Email destinatario --}}
+                    {{-- Recipient email --}}
                     <div>
-                        <x-input-label for="recipient_email" :value="__('Email del paciente')" />
+                        <x-input-label for="recipient_email" :value="__('Patient email')" />
                         <x-text-input id="recipient_email" name="recipient_email" type="email"
                             class="mt-1 block w-full"
                             :value="old('recipient_email')"
-                            placeholder="paciente@ejemplo.com"
+                            placeholder="patient@example.com"
                             required />
-                        <p class="text-xs text-gray-400 mt-1">Se enviará el enlace de evaluación a este correo.</p>
+                        <p class="text-xs text-gray-400 mt-1">{{ __('The screening link will be sent to this email.') }}</p>
                         <x-input-error :messages="$errors->get('recipient_email')" class="mt-1" />
                     </div>
 
-                    {{-- Mensaje opcional --}}
+                    {{-- Optional message --}}
                     <div>
-                        <x-input-label for="message_to_patient" :value="__('Mensaje para el paciente (opcional)')" />
+                        <x-input-label for="message_to_patient" :value="__('Message for patient (optional)')" />
                         <textarea id="message_to_patient" name="message_to_patient" rows="3"
-                            placeholder="Hola, te comparto este enlace para completar tu evaluación…"
+                            placeholder="Hi, here is the link to complete your assessment…"
                             class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">{{ old('message_to_patient') }}</textarea>
                         <x-input-error :messages="$errors->get('message_to_patient')" class="mt-1" />
                     </div>
@@ -99,10 +99,10 @@
                     <div class="flex items-center justify-end gap-3 pt-2">
                         <a href="{{ route('psychologist.screenings.index') }}"
                            class="text-sm text-gray-500 hover:text-gray-700">
-                            Cancelar
+                            {{ __('Cancel') }}
                         </a>
                         <x-primary-button>
-                            Enviar evaluación
+                            {{ __('Send Screening') }}
                         </x-primary-button>
                     </div>
                 </form>

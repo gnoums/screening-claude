@@ -4,7 +4,7 @@
             <a href="{{ route('psychologist.patients.show', $patient) }}"
                class="text-gray-400 hover:text-gray-600 text-sm">← {{ $patient->full_name }}</a>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Editar paciente
+                {{ __('Edit patient') }}
             </h2>
         </div>
     </x-slot>
@@ -19,14 +19,14 @@
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <x-input-label for="first_name" :value="__('Nombre')" />
+                            <x-input-label for="first_name" :value="__('First name')" />
                             <x-text-input id="first_name" name="first_name" type="text"
                                 class="mt-1 block w-full"
                                 :value="old('first_name', $patient->first_name)" required autofocus />
                             <x-input-error :messages="$errors->get('first_name')" class="mt-1" />
                         </div>
                         <div>
-                            <x-input-label for="last_name" :value="__('Apellido(s)')" />
+                            <x-input-label for="last_name" :value="__('Last name(s)')" />
                             <x-text-input id="last_name" name="last_name" type="text"
                                 class="mt-1 block w-full"
                                 :value="old('last_name', $patient->last_name)" required />
@@ -35,7 +35,7 @@
                     </div>
 
                     <div>
-                        <x-input-label for="email" :value="__('Correo electrónico')" />
+                        <x-input-label for="email" :value="__('Email address')" />
                         <x-text-input id="email" name="email" type="email"
                             class="mt-1 block w-full"
                             :value="old('email', $patient->email)" />
@@ -43,7 +43,7 @@
                     </div>
 
                     <div>
-                        <x-input-label for="phone" :value="__('Teléfono')" />
+                        <x-input-label for="phone" :value="__('Phone')" />
                         <x-text-input id="phone" name="phone" type="text"
                             class="mt-1 block w-full"
                             :value="old('phone', $patient->phone)" />
@@ -52,18 +52,23 @@
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <x-input-label for="date_of_birth" :value="__('Fecha de nacimiento')" />
+                            <x-input-label for="date_of_birth" :value="__('Date of birth')" />
                             <x-text-input id="date_of_birth" name="date_of_birth" type="date"
                                 class="mt-1 block w-full"
                                 :value="old('date_of_birth', $patient->date_of_birth?->format('Y-m-d'))" />
                             <x-input-error :messages="$errors->get('date_of_birth')" class="mt-1" />
                         </div>
                         <div>
-                            <x-input-label for="sex" :value="__('Sexo')" />
+                            <x-input-label for="sex" :value="__('Sex')" />
                             <select id="sex" name="sex"
                                 class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
-                                <option value="">— Seleccionar —</option>
-                                @foreach(['male' => 'Masculino', 'female' => 'Femenino', 'other' => 'Otro', 'prefer_not_to_say' => 'Prefiero no decir'] as $val => $lbl)
+                                <option value="">{{ __('— Select —') }}</option>
+                                @foreach([
+                                    'male'              => __('Male'),
+                                    'female'            => __('Female'),
+                                    'other'             => __('Other'),
+                                    'prefer_not_to_say' => __('Prefer not to say'),
+                                ] as $val => $lbl)
                                     <option value="{{ $val }}" {{ old('sex', $patient->sex) === $val ? 'selected' : '' }}>
                                         {{ $lbl }}
                                     </option>
@@ -74,7 +79,7 @@
                     </div>
 
                     <div>
-                        <x-input-label for="notes" :value="__('Notas clínicas')" />
+                        <x-input-label for="notes" :value="__('Clinical notes')" />
                         <textarea id="notes" name="notes" rows="4"
                             class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">{{ old('notes', $patient->notes) }}</textarea>
                         <x-input-error :messages="$errors->get('notes')" class="mt-1" />
@@ -83,10 +88,10 @@
                     <div class="flex items-center justify-end gap-3 pt-2">
                         <a href="{{ route('psychologist.patients.show', $patient) }}"
                            class="text-sm text-gray-500 hover:text-gray-700">
-                            Cancelar
+                            {{ __('Cancel') }}
                         </a>
                         <x-primary-button>
-                            Guardar cambios
+                            {{ __('Save changes') }}
                         </x-primary-button>
                     </div>
                 </form>

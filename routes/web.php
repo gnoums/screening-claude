@@ -22,6 +22,17 @@ Route::post('stripe/webhook', StripeWebhookController::class)
     ->name('stripe.webhook');
 
 // ====================================================================
+// Language switch — stores locale in session, then redirects back
+// ====================================================================
+
+Route::get('/language/{locale}', function (string $locale) {
+    if (in_array($locale, ['en', 'es'])) {
+        session(['locale' => $locale]);
+    }
+    return back();
+})->name('language.switch');
+
+// ====================================================================
 // Rutas públicas — Paciente vía token
 // Esta ruta DEBE ir ANTES de /s/{token}
 // ====================================================================

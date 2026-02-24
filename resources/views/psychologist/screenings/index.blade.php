@@ -2,11 +2,11 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Evaluaciones
+                {{ __('Screenings') }}
             </h2>
             <a href="{{ route('psychologist.screenings.create') }}"
                class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold text-sm hover:bg-blue-700 transition">
-                + Nueva evaluación
+                {{ __('+ New Screening') }}
             </a>
         </div>
     </x-slot>
@@ -24,12 +24,12 @@
                 @forelse ($requests as $req)
                     @php
                         $badges = [
-                            'draft'               => ['bg-gray-100 text-gray-600', 'Borrador'],
-                            'sent'                => ['bg-yellow-100 text-yellow-700', 'Enviado'],
-                            'partially_completed' => ['bg-blue-100 text-blue-700', 'En progreso'],
-                            'completed'           => ['bg-green-100 text-green-700', 'Completado'],
-                            'expired'             => ['bg-red-100 text-red-600', 'Expirado'],
-                            'cancelled'           => ['bg-gray-100 text-gray-500', 'Cancelado'],
+                            'draft'               => ['bg-gray-100 text-gray-600',    __('Draft')],
+                            'sent'                => ['bg-yellow-100 text-yellow-700', __('Sent')],
+                            'partially_completed' => ['bg-blue-100 text-blue-700',    __('In Progress')],
+                            'completed'           => ['bg-green-100 text-green-700',  __('Completed')],
+                            'expired'             => ['bg-red-100 text-red-600',      __('Expired')],
+                            'cancelled'           => ['bg-gray-100 text-gray-500',    __('Cancelled')],
                         ];
                         [$cls, $label] = $badges[$req->status] ?? ['bg-gray-100 text-gray-600', $req->status];
                     @endphp
@@ -42,7 +42,7 @@
                                 {{ $req->items->pluck('assessment.name')->filter()->join(', ') ?: '—' }}
                             </div>
                             <div class="text-xs text-gray-400 mt-0.5">
-                                {{ $req->sent_at?->format('d/m/Y H:i') ?? 'No enviado' }}
+                                {{ $req->sent_at?->format('d/m/Y H:i') ?? __('Not sent') }}
                                 &middot; {{ $req->recipient_email }}
                             </div>
                         </div>
@@ -52,15 +52,15 @@
                             </span>
                             <a href="{{ route('psychologist.screenings.show', $req) }}"
                                class="text-blue-600 text-sm hover:underline">
-                                Ver →
+                                {{ __('View →') }}
                             </a>
                         </div>
                     </div>
                 @empty
                     <div class="px-6 py-12 text-center text-gray-400">
-                        Aún no has enviado ninguna evaluación.
+                        {{ __("You haven't sent any screenings yet.") }}
                         <a href="{{ route('psychologist.screenings.create') }}" class="text-blue-600 hover:underline ml-1">
-                            Crear la primera
+                            {{ __('Create the first one') }}
                         </a>
                     </div>
                 @endforelse

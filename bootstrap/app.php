@@ -12,6 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Append SetLocale to every web request so the chosen language persists
+        $middleware->web(append: [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
+
         // Alias para el middleware de admin
         $middleware->alias([
             'admin' => EnsureUserIsAdmin::class,

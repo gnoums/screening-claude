@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evaluación Psicológica – {{ $assessment->name }}</title>
+    <title>{{ __('Psychological Assessment – :name', ['name' => $assessment->name]) }}</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         body {
@@ -15,6 +15,10 @@
             border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,.08);
             padding: 32px;
         }
+        .lang-switch { text-align: right; margin-bottom: 12px; font-size: .75rem; }
+        .lang-switch a { color: #718096; text-decoration: none; padding: 2px 6px; border-radius: 4px; }
+        .lang-switch a.active { font-weight: bold; color: #4a6fa5; background: #ebf4ff; }
+        .lang-switch a:hover { color: #4a6fa5; }
         .progress-bar-bg { background: #e2e8f0; border-radius: 99px; height: 8px; margin: 12px 0 24px; }
         .progress-bar-fill { background: #4a6fa5; height: 8px; border-radius: 99px; transition: width .3s; }
         h1 { font-size: 1.4rem; color: #2d3748; margin-bottom: 4px; }
@@ -44,27 +48,34 @@
 <body>
 <div class="card">
 
-    {{-- Encabezado --}}
+    {{-- Language toggle --}}
+    <div class="lang-switch">
+        <a href="{{ route('language.switch', 'en') }}" class="{{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
+        &nbsp;|&nbsp;
+        <a href="{{ route('language.switch', 'es') }}" class="{{ app()->getLocale() === 'es' ? 'active' : '' }}">ES</a>
+    </div>
+
+    {{-- Header --}}
     <h1>{{ $assessment->name }}</h1>
     <p class="subtitle">
-        Evaluación enviada por <strong>{{ $screeningRequest->user->name }}</strong>.
-        Responde con honestidad según cómo te has sentido recientemente.
+        {{ __('Assessment sent by :name.', ['name' => $screeningRequest->user->name]) }}
+        {{ __('Answer honestly according to how you have felt recently.') }}
     </p>
 
-    {{-- Progreso --}}
+    {{-- Progress --}}
     @php
         $total     = $screeningRequest->items->count() + $screeningRequest->items->where('status','completed')->count();
         $completed = $screeningRequest->items->where('status','completed')->count();
         $pct       = $total > 0 ? round(($completed / $total) * 100) : 0;
     @endphp
     <div style="font-size:.8rem;color:#718096;">
-        Prueba {{ $completed + 1 }} de {{ $total }}
+        {{ __('Test :current of :total', ['current' => $completed + 1, 'total' => $total]) }}
     </div>
     <div class="progress-bar-bg">
         <div class="progress-bar-fill" style="width:{{ $pct }}%"></div>
     </div>
 
-    {{-- Errores --}}
+    {{-- Errors --}}
     @if($errors->any())
         <div class="error-msg">
             @foreach($errors->all() as $error)
@@ -73,7 +84,7 @@
         </div>
     @endif
 
-    {{-- Formulario --}}
+    {{-- Form --}}
     <form method="POST" action="{{ route('public.screening.submit', ['token' => $token]) }}">
         @csrf
 
@@ -82,7 +93,7 @@
                 <div class="question-text">
                     {{ $loop->iteration }}. {{ $question->question_text }}
                     @if($question->is_required)
-                        <span style="color:#e53e3e;font-size:.8rem;">(requerida)</span>
+                        <span style="color:#e53e3e;font-size:.8rem;">{{ __('(required)') }}</span>
                     @endif
                 </div>
                 <div class="options-grid">
@@ -105,13 +116,12 @@
         @endforeach
 
         <button type="submit" class="btn-submit">
-            Enviar respuestas →
+            {{ __('Submit answers →') }}
         </button>
     </form>
 
     <p class="psychologist-note">
-        Tus respuestas son confidenciales y solo serán vistas por
-        {{ $screeningRequest->user->name }}.
+        {{ __('Your answers are confidential and will only be seen by :name.', ['name' => $screeningRequest->user->name]) }}
     </p>
 </div>
 </body>

@@ -15,40 +15,55 @@
                     @if(Auth::user()->role === 'admin')
                         {{-- Admin nav --}}
                         <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                            Panel Admin
+                            {{ __('Admin Panel') }}
                         </x-nav-link>
                         <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
-                            Usuarios
+                            {{ __('Users') }}
                         </x-nav-link>
                         <x-nav-link :href="route('admin.assessments.index')" :active="request()->routeIs('admin.assessments.*')">
-                            Pruebas
+                            {{ __('Assessments') }}
                         </x-nav-link>
                         <x-nav-link :href="route('admin.audit-logs.index')" :active="request()->routeIs('admin.audit-logs.*')">
-                            Audit Logs
+                            {{ __('Audit Logs') }}
                         </x-nav-link>
                     @else
                         {{-- Psychologist nav --}}
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            Dashboard
+                            {{ __('Dashboard') }}
                         </x-nav-link>
                         <x-nav-link :href="route('psychologist.patients.index')" :active="request()->routeIs('psychologist.patients.*')">
-                            Pacientes
+                            {{ __('Patients') }}
                         </x-nav-link>
                         <x-nav-link :href="route('psychologist.screenings.index')" :active="request()->routeIs('psychologist.screenings.*')">
-                            Evaluaciones
+                            {{ __('Screenings') }}
                         </x-nav-link>
                         <x-nav-link :href="route('psychologist.billing.index')" :active="request()->routeIs('psychologist.billing.*')">
-                            Créditos
+                            {{ __('Credits') }}
                         </x-nav-link>
                     @endif
                 </div>
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="hidden sm:flex sm:items-center sm:ms-6 gap-3">
                 @if(Auth::user()->role === 'admin')
-                    <span class="text-xs font-bold bg-red-100 text-red-700 px-2 py-1 rounded me-3">ADMIN</span>
+                    <span class="text-xs font-bold bg-red-100 text-red-700 px-2 py-1 rounded">ADMIN</span>
                 @endif
+
+                {{-- Language toggle --}}
+                <div class="flex items-center text-xs gap-0.5">
+                    <a href="{{ route('language.switch', 'en') }}"
+                       class="px-1.5 py-0.5 rounded transition
+                              {{ app()->getLocale() === 'en' ? 'font-bold text-blue-600 bg-blue-50' : 'text-gray-400 hover:text-gray-600' }}">
+                        EN
+                    </a>
+                    <span class="text-gray-300">|</span>
+                    <a href="{{ route('language.switch', 'es') }}"
+                       class="px-1.5 py-0.5 rounded transition
+                              {{ app()->getLocale() === 'es' ? 'font-bold text-blue-600 bg-blue-50' : 'text-gray-400 hover:text-gray-600' }}">
+                        ES
+                    </a>
+                </div>
 
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
@@ -65,12 +80,12 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            Perfil
+                            {{ __('Profile') }}
                         </x-dropdown-link>
 
                         @if(Auth::user()->role !== 'admin')
                             <x-dropdown-link :href="route('psychologist.billing.index')">
-                                Créditos disponibles: {{ Auth::user()->creditBalance() }}
+                                {{ __('Available credits: :count', ['count' => Auth::user()->creditBalance()]) }}
                             </x-dropdown-link>
                         @endif
 
@@ -79,7 +94,7 @@
                             @csrf
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault(); this.closest('form').submit();">
-                                Cerrar sesión
+                                {{ __('Log out') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -103,29 +118,29 @@
         <div class="pt-2 pb-3 space-y-1">
             @if(Auth::user()->role === 'admin')
                 <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                    Panel Admin
+                    {{ __('Admin Panel') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
-                    Usuarios
+                    {{ __('Users') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.assessments.index')" :active="request()->routeIs('admin.assessments.*')">
-                    Pruebas
+                    {{ __('Assessments') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.audit-logs.index')" :active="request()->routeIs('admin.audit-logs.*')">
-                    Audit Logs
+                    {{ __('Audit Logs') }}
                 </x-responsive-nav-link>
             @else
                 <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    Dashboard
+                    {{ __('Dashboard') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('psychologist.patients.index')" :active="request()->routeIs('psychologist.patients.*')">
-                    Pacientes
+                    {{ __('Patients') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('psychologist.screenings.index')" :active="request()->routeIs('psychologist.screenings.*')">
-                    Evaluaciones
+                    {{ __('Screenings') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('psychologist.billing.index')" :active="request()->routeIs('psychologist.billing.*')">
-                    Créditos
+                    {{ __('Credits') }}
                 </x-responsive-nav-link>
             @endif
         </div>
@@ -139,15 +154,30 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    Perfil
+                    {{ __('Profile') }}
                 </x-responsive-nav-link>
+
+                {{-- Language toggle (mobile) --}}
+                <div class="flex items-center px-4 py-2 gap-2">
+                    <span class="text-sm text-gray-500">{{ __('Language') }}:</span>
+                    <a href="{{ route('language.switch', 'en') }}"
+                       class="text-xs px-2 py-0.5 rounded border transition
+                              {{ app()->getLocale() === 'en' ? 'font-bold text-blue-600 border-blue-300 bg-blue-50' : 'text-gray-400 border-gray-200 hover:text-gray-600' }}">
+                        EN
+                    </a>
+                    <a href="{{ route('language.switch', 'es') }}"
+                       class="text-xs px-2 py-0.5 rounded border transition
+                              {{ app()->getLocale() === 'es' ? 'font-bold text-blue-600 border-blue-300 bg-blue-50' : 'text-gray-400 border-gray-200 hover:text-gray-600' }}">
+                        ES
+                    </a>
+                </div>
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault(); this.closest('form').submit();">
-                        Cerrar sesión
+                        {{ __('Log out') }}
                     </x-responsive-nav-link>
                 </form>
             </div>

@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <a href="{{ route('psychologist.screenings.index') }}"
-                   class="text-gray-400 hover:text-gray-600 text-sm">← Evaluaciones</a>
+                   class="text-gray-400 hover:text-gray-600 text-sm">{{ __('← Screenings') }}</a>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     {{ $screening->patient->full_name }}
                 </h2>
@@ -12,14 +12,14 @@
                 @if($screening->isCompleted())
                     <a href="{{ route('psychologist.screenings.pdf', $screening) }}"
                        class="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold text-sm hover:bg-green-700 transition">
-                        Descargar PDF
+                        {{ __('Download PDF') }}
                     </a>
                 @elseif(!in_array($screening->status, ['completed', 'cancelled']))
                     <form method="POST" action="{{ route('psychologist.screenings.resend', $screening) }}">
                         @csrf
                         <button type="submit"
                                 class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg font-semibold text-sm hover:bg-gray-50 transition">
-                            Reenviar enlace
+                            {{ __('Resend link') }}
                         </button>
                     </form>
                 @endif
@@ -38,27 +38,27 @@
 
             @if (session('warning'))
                 <div class="px-4 py-3 bg-amber-50 border border-amber-300 text-amber-800 rounded-lg text-sm">
-                    <strong>Atención:</strong> {{ session('warning') }}
+                    <strong>{{ __('Attention:') }}</strong> {{ session('warning') }}
                 </div>
             @endif
 
-            {{-- Enlace para compartir (aparece al crear/reenviar y al generar manualmente) --}}
+            {{-- Share link panel --}}
             @if(!in_array($screening->status, ['completed', 'cancelled']))
             <div class="bg-white rounded-xl shadow p-6" id="share-panel">
                 <h3 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
                     </svg>
-                    Compartir enlace de evaluación
+                    {{ __('Share screening link') }}
                 </h3>
 
                 @if(session('access_url'))
-                <p class="text-xs text-gray-500 mb-2">Enlace generado. Cópialo y envíalo al paciente por el canal que prefieras.</p>
+                <p class="text-xs text-gray-500 mb-2">{{ __('Link generated. Copy it and send it to the patient through your preferred channel.') }}</p>
                 @else
-                <p class="text-xs text-gray-500 mb-2">Genera un nuevo enlace de acceso para compartirlo por WhatsApp u otra plataforma.</p>
+                <p class="text-xs text-gray-500 mb-2">{{ __('Generate a new access link to share via WhatsApp or other platform.') }}</p>
                 @endif
 
-                {{-- Input con el URL (oculto hasta generar) --}}
+                {{-- URL input (hidden until generated) --}}
                 <div id="link-container" class="{{ session('access_url') ? '' : 'hidden' }} flex flex-col sm:flex-row gap-2 mb-3">
                     <input id="access-url-input" type="text" readonly
                            value="{{ session('access_url', '') }}"
@@ -68,7 +68,7 @@
                         <svg id="copy-icon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                         </svg>
-                        <span id="copy-label">Copiar</span>
+                        <span id="copy-label">{{ __('Copy') }}</span>
                     </button>
                     <a id="whatsapp-btn" href="#" target="_blank" rel="noopener"
                        class="flex items-center justify-center gap-1.5 px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-semibold hover:bg-green-600 transition shrink-0">
@@ -81,43 +81,43 @@
                 </div>
                 <p id="expires-label-sm" class="text-xs text-gray-400 mb-3 {{ session('access_url') ? '' : 'hidden' }}"></p>
 
-                {{-- Botón para generar nuevo enlace --}}
+                {{-- Generate new link button --}}
                 <button id="get-link-btn" onclick="generateLink()"
                         class="flex items-center gap-1.5 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm font-semibold hover:bg-gray-50 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
                     </svg>
-                    <span id="get-link-label">{{ session('access_url') ? 'Generar nuevo enlace' : 'Generar enlace para compartir' }}</span>
+                    <span id="get-link-label">{{ session('access_url') ? __('Generate new link') : __('Generate sharing link') }}</span>
                 </button>
                 <p class="text-xs text-amber-600 mt-2 {{ session('access_url') ? '' : 'hidden' }}" id="new-link-warning">
-                    Generar un nuevo enlace invalida el anterior.
+                    {{ __('Generating a new link invalidates the previous one.') }}
                 </p>
             </div>
             @endif
 
-            {{-- Resumen de la solicitud --}}
+            {{-- Screening details --}}
             <div class="bg-white rounded-xl shadow p-6">
-                <h3 class="font-semibold text-gray-700 mb-4">Detalles de la evaluación</h3>
+                <h3 class="font-semibold text-gray-700 mb-4">{{ __('Screening details') }}</h3>
                 @php
                     $badges = [
-                        'draft'               => ['bg-gray-100 text-gray-600', 'Borrador'],
-                        'sent'                => ['bg-yellow-100 text-yellow-700', 'Enviado'],
-                        'partially_completed' => ['bg-blue-100 text-blue-700', 'En progreso'],
-                        'completed'           => ['bg-green-100 text-green-700', 'Completado'],
-                        'expired'             => ['bg-red-100 text-red-600', 'Expirado'],
-                        'cancelled'           => ['bg-gray-100 text-gray-500', 'Cancelado'],
+                        'draft'               => ['bg-gray-100 text-gray-600',    __('Draft')],
+                        'sent'                => ['bg-yellow-100 text-yellow-700', __('Sent')],
+                        'partially_completed' => ['bg-blue-100 text-blue-700',    __('In Progress')],
+                        'completed'           => ['bg-green-100 text-green-700',  __('Completed')],
+                        'expired'             => ['bg-red-100 text-red-600',      __('Expired')],
+                        'cancelled'           => ['bg-gray-100 text-gray-500',    __('Cancelled')],
                     ];
                     [$cls, $label] = $badges[$screening->status] ?? ['bg-gray-100 text-gray-600', $screening->status];
                 @endphp
                 <dl class="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4 text-sm">
                     <div>
-                        <dt class="text-gray-500">Estado</dt>
+                        <dt class="text-gray-500">{{ __('Status') }}</dt>
                         <dd class="mt-0.5">
                             <span class="text-xs font-semibold px-2 py-1 rounded-full {{ $cls }}">{{ $label }}</span>
                         </dd>
                     </div>
                     <div>
-                        <dt class="text-gray-500">Paciente</dt>
+                        <dt class="text-gray-500">{{ __('Patient') }}</dt>
                         <dd class="text-gray-800 mt-0.5">
                             <a href="{{ route('psychologist.patients.show', $screening->patient) }}"
                                class="text-blue-600 hover:underline">
@@ -126,40 +126,40 @@
                         </dd>
                     </div>
                     <div>
-                        <dt class="text-gray-500">Email destinatario</dt>
+                        <dt class="text-gray-500">{{ __('Recipient email') }}</dt>
                         <dd class="text-gray-800 mt-0.5">{{ $screening->recipient_email }}</dd>
                     </div>
                     <div>
-                        <dt class="text-gray-500">Enviado</dt>
+                        <dt class="text-gray-500">{{ __('Sent') }}</dt>
                         <dd class="text-gray-800 mt-0.5">{{ $screening->sent_at?->format('d/m/Y H:i') ?? '—' }}</dd>
                     </div>
                     <div>
-                        <dt class="text-gray-500">Completado</dt>
+                        <dt class="text-gray-500">{{ __('Completed') }}</dt>
                         <dd class="text-gray-800 mt-0.5">{{ $screening->completed_at?->format('d/m/Y H:i') ?? '—' }}</dd>
                     </div>
                     <div>
-                        <dt class="text-gray-500">Créditos usados</dt>
+                        <dt class="text-gray-500">{{ __('Credits used') }}</dt>
                         <dd class="text-gray-800 mt-0.5">{{ $screening->credits_charged }}</dd>
                     </div>
                 </dl>
 
                 @if($screening->message_to_patient)
                     <div class="mt-4 pt-4 border-t border-gray-100">
-                        <dt class="text-gray-500 text-sm mb-1">Mensaje enviado</dt>
+                        <dt class="text-gray-500 text-sm mb-1">{{ __('Sent message') }}</dt>
                         <dd class="text-gray-700 text-sm italic">{{ $screening->message_to_patient }}</dd>
                     </div>
                 @endif
             </div>
 
-            {{-- Resultados por prueba --}}
+            {{-- Results per assessment --}}
             @foreach($screening->items as $item)
                 <div class="bg-white rounded-xl shadow overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-                        <h3 class="font-semibold text-gray-700">{{ $item->assessment->name ?? 'Prueba' }}</h3>
+                        <h3 class="font-semibold text-gray-700">{{ $item->assessment->name ?? __('Assessments') }}</h3>
                         @php
                             $itemBadges = [
-                                'pending'   => ['bg-gray-100 text-gray-500', 'Pendiente'],
-                                'completed' => ['bg-green-100 text-green-700', 'Completado'],
+                                'pending'   => ['bg-gray-100 text-gray-500',  __('Pending')],
+                                'completed' => ['bg-green-100 text-green-700', __('Completed')],
                             ];
                             [$ic, $il] = $itemBadges[$item->status] ?? ['bg-gray-100 text-gray-500', $item->status];
                         @endphp
@@ -168,13 +168,13 @@
 
                     @if($item->response)
                         <div class="px-6 py-5">
-                            {{-- Puntaje e interpretación --}}
+                            {{-- Score and interpretation --}}
                             <div class="flex items-center gap-6 mb-4">
                                 <div class="text-center">
                                     <div class="text-3xl font-bold text-blue-600">
                                         {{ $item->response->total_score }}
                                     </div>
-                                    <div class="text-xs text-gray-500 mt-0.5">Puntaje total</div>
+                                    <div class="text-xs text-gray-500 mt-0.5">{{ __('Total score') }}</div>
                                 </div>
                                 @if($item->response->interpretation)
                                     <div class="flex-1 px-4 py-3 bg-blue-50 rounded-lg">
@@ -185,11 +185,11 @@
                                 @endif
                             </div>
 
-                            {{-- Respuestas detalladas --}}
+                            {{-- Detailed answers --}}
                             @if($item->response->answers->isNotEmpty())
                                 <details class="mt-2">
                                     <summary class="text-sm text-gray-500 cursor-pointer hover:text-gray-700">
-                                        Ver respuestas detalladas
+                                        {{ __('View detailed responses') }}
                                     </summary>
                                     <div class="mt-3 space-y-2">
                                         @foreach($item->response->answers as $answer)
@@ -209,7 +209,7 @@
                         </div>
                     @else
                         <div class="px-6 py-8 text-center text-gray-400 text-sm">
-                            El paciente aún no ha completado esta prueba.
+                            {{ __('The patient has not completed this test yet.') }}
                         </div>
                     @endif
                 </div>
@@ -224,31 +224,43 @@
     const csrfToken   = "{{ csrf_token() }}";
     const patientName = "{{ addslashes($screening->patient->full_name) }}";
 
+    // Translated strings for JS
+    const i18n = {
+        generateNewLink:   "{{ __('Generate new link') }}",
+        generateSharingLink: "{{ __('Generate sharing link') }}",
+        generating:        "{{ __('Generating...') }}",
+        copy:              "{{ __('Copy') }}",
+        copied:            "{{ __('Copied!') }}",
+        errorLink:         "{{ __('Error generating link.') }}",
+        errorConnection:   "{{ __('Connection error. Try again.') }}",
+        expiresOn:         "{{ __('Expires on :date', ['date' => '']) }}".replace(': ', ''),
+        waMessage:         "{{ __('Hello, :name, I am sharing the link for your psychological assessment: :url', ['name' => addslashes($screening->patient->full_name), 'url' => ':url']) }}",
+    };
+
     @if(session('access_url'))
-    // Si viene de crear/reenviar, inicializar WhatsApp con el URL de sesión
     document.addEventListener('DOMContentLoaded', function () {
         setLinkUI("{{ session('access_url') }}", null);
     });
     @endif
 
     function setLinkUI(url, expiresAt) {
-        const input    = document.getElementById('access-url-input');
-        const waBtn    = document.getElementById('whatsapp-btn');
-        const container = document.getElementById('link-container');
-        const warning  = document.getElementById('new-link-warning');
+        const input      = document.getElementById('access-url-input');
+        const waBtn      = document.getElementById('whatsapp-btn');
+        const container  = document.getElementById('link-container');
+        const warning    = document.getElementById('new-link-warning');
         const getLinkLabel = document.getElementById('get-link-label');
 
         input.value = url;
         container.classList.remove('hidden');
         warning.classList.remove('hidden');
-        getLinkLabel.textContent = 'Generar nuevo enlace';
+        getLinkLabel.textContent = i18n.generateNewLink;
 
-        const waMessage = `Hola ${patientName}, te comparto el enlace para tu evaluación psicológica: ${url}`;
+        const waMessage = i18n.waMessage.replace(':url', url);
         waBtn.href = 'https://wa.me/?text=' + encodeURIComponent(waMessage);
 
         if (expiresAt) {
             const expLabel = document.getElementById('expires-label-sm');
-            expLabel.textContent = 'Expira el ' + expiresAt;
+            expLabel.textContent = i18n.expiresOn + expiresAt;
             expLabel.classList.remove('hidden');
         }
     }
@@ -258,7 +270,7 @@
         const label = document.getElementById('get-link-label');
         const orig  = label.textContent;
         btn.disabled = true;
-        label.textContent = 'Generando...';
+        label.textContent = i18n.generating;
 
         try {
             const resp = await fetch(getLinkUrl, {
@@ -271,18 +283,19 @@
 
             if (!resp.ok) {
                 const err = await resp.json().catch(() => ({}));
-                alert(err.message ?? 'Error al generar el enlace.');
+                alert(err.message ?? i18n.errorLink);
                 return;
             }
 
             const data = await resp.json();
             setLinkUI(data.url, data.expires_at);
         } catch (e) {
-            alert('Error de conexión. Intenta de nuevo.');
+            alert(i18n.errorConnection);
         } finally {
             btn.disabled = false;
-            label.textContent = document.getElementById('get-link-label').textContent === 'Generando...'
-                ? orig : document.getElementById('get-link-label').textContent;
+            if (label.textContent === i18n.generating) {
+                label.textContent = orig;
+            }
         }
     }
 
@@ -292,13 +305,13 @@
 
         try {
             await navigator.clipboard.writeText(input.value);
-            label.textContent = '¡Copiado!';
-            setTimeout(() => label.textContent = 'Copiar', 2000);
+            label.textContent = i18n.copied;
+            setTimeout(() => label.textContent = i18n.copy, 2000);
         } catch {
             input.select();
             document.execCommand('copy');
-            label.textContent = '¡Copiado!';
-            setTimeout(() => label.textContent = 'Copiar', 2000);
+            label.textContent = i18n.copied;
+            setTimeout(() => label.textContent = i18n.copy, 2000);
         }
     }
 </script>
