@@ -1,20 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" {{ $attributes->merge(['class' => 'block h-9 w-auto']) }}>
-  <path d="..." fill="#5a7123">
-  <defs>
-    <style>
-      .cls-1 {
-        fill: #747755;
-      }
-
-      .cls-2 {
-        fill: #494949;
-      }
-
-      .cls-3 {
-        fill: #bfb4a0;
-      }
-    </style>
+    <defs>
+        <style>
   </defs>
   <g id="Layer_1-2" data-name="Layer 1">
     <path class="cls-2" d="M115.07.2v1.43c1.35-.9,2.97-1.43,4.72-1.43,4.7,0,8.5,3.81,8.5,8.5s-3.81,8.5-8.5,8.5c-1.75,0-3.37-.53-4.72-1.43v8.76h-3.78V.2h3.78ZM119.79,13.42c2.61,0,4.72-2.11,4.72-4.72s-2.11-4.72-4.72-4.72-4.72,2.11-4.72,4.72,2.11,4.72,4.72,4.72"/>
