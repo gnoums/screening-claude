@@ -136,8 +136,15 @@
                                class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
                         <input type="text" name="severity_label" placeholder="Etiqueta (Mínima, Leve…)" required
                                class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                        <input type="text" name="color_code" placeholder="Color hex (#4CAF50)"
-                               class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                        <select name="color_code"
+                                class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                            <option value="">— Color —</option>
+                            <option value="#4CAF50">🟢 Verde — Mínima</option>
+                            <option value="#8BC34A">🟡 Verde claro — Leve</option>
+                            <option value="#FFC107">🟡 Ámbar — Moderada</option>
+                            <option value="#FF9800">🟠 Naranja — Mod. severa</option>
+                            <option value="#F44336">🔴 Rojo — Severa</option>
+                        </select>
                         <textarea name="interpretation_text" placeholder="Texto de interpretación clínica" required
                                   class="col-span-2 border border-gray-300 rounded-lg px-3 py-2 text-sm" rows="2"></textarea>
                         <button type="submit"
