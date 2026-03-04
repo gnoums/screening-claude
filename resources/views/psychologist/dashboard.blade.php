@@ -12,26 +12,26 @@
             @if($trialInfo['isActive'])
                 <div class="mb-6 bg-primary-50 border border-primary-200 rounded-xl px-5 py-4 flex items-center justify-between">
                     <div>
-                        <span class="font-semibold text-primary-800">Prueba gratuita activa</span>
+                        <span class="font-semibold text-primary-800">{{ __('Free trial active') }}</span>
                         <span class="text-primary-700 ml-2">
-                            — {{ $trialInfo['daysLeft'] }} {{ $trialInfo['daysLeft'] === 1 ? 'día' : 'días' }} restantes
-                            &middot; {{ $stats['credit_balance'] }}&nbsp;/&nbsp;{{ $trialInfo['creditLimit'] }} créditos disponibles
+                            — {{ $trialInfo['daysLeft'] }} {{ $trialInfo['daysLeft'] === 1 ? __('day') : __('days') }} {{ __('remaining') }}
+                            &middot; {{ $stats['credit_balance'] }}&nbsp;/&nbsp;{{ $trialInfo['creditLimit'] }} {{ __('credits available') }}
                         </span>
                     </div>
                     <a href="{{ route('psychologist.billing.index') }}"
                        class="text-sm font-semibold text-primary-700 hover:text-primary-900 underline whitespace-nowrap ml-4">
-                        Adquirir créditos
+                        {{ __('Get credits') }}
                     </a>
                 </div>
             @elseif($trialInfo['hasExpired'])
                 <div class="mb-6 bg-red-50 border border-red-200 rounded-xl px-5 py-4 flex items-center justify-between">
                     <div>
-                        <span class="font-semibold text-red-800">Tu prueba gratuita ha expirado</span>
-                        <span class="text-red-700 ml-2">— Adquiere créditos para seguir enviando evaluaciones.</span>
+                        <span class="font-semibold text-red-800">{{ __('Your free trial has expired') }}</span>
+                        <span class="text-red-700 ml-2">— {{ __('Purchase credits to continue sending assessments.') }}</span>
                     </div>
                     <a href="{{ route('psychologist.billing.index') }}"
                        class="text-sm font-semibold text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition whitespace-nowrap ml-4">
-                        Comprar créditos
+                        {{ __('Buy credits') }}
                     </a>
                 </div>
             @endif

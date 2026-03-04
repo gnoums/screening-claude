@@ -33,7 +33,7 @@ class TrialService
             $user,
             self::TRIAL_CREDITS,
             'trial',
-            'Créditos gratuitos — prueba de ' . self::TRIAL_DAYS . ' días',
+            self::TRIAL_DAYS . '-day free trial credits',
         );
     }
 }

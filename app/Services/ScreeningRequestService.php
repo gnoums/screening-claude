@@ -47,17 +47,17 @@ class ScreeningRequestService
             $assessments    = Assessment::active()->whereIn('id', $assessmentIds)->get();
             $totalCredits   = $assessments->sum('credits_cost');
 
-            // Validar acceso según estado del trial
+            // Validate access based on trial status
             if ($psychologist->trialHasExpired()) {
                 if ($psychologist->paidCreditBalance() < $totalCredits) {
                     throw new \DomainException(
-                        'Tu período de prueba gratuito de ' . \App\Services\TrialService::TRIAL_DAYS . ' días ha expirado. '
-                        . 'Adquiere créditos para continuar enviando evaluaciones.',
+                        'Your ' . \App\Services\TrialService::TRIAL_DAYS . '-day free trial has expired. '
+                        . 'Purchase credits to continue sending assessments.',
                     );
                 }
             } elseif (! $psychologist->hasCredits($totalCredits)) {
                 throw new \DomainException(
-                    "Créditos insuficientes. Necesitas {$totalCredits} y tienes {$psychologist->creditBalance()}.",
+                    "Insufficient credits. You need {$totalCredits} and have {$psychologist->creditBalance()}.",
                 );
             }
 

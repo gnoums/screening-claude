@@ -9,20 +9,23 @@
             {{-- Trial banner --}}
             @if($trialInfo['isActive'])
                 <div class="bg-primary-50 border border-primary-200 rounded-xl px-5 py-4">
-                    <div class="font-semibold text-primary-800 mb-1">Prueba gratuita activa</div>
+                    <div class="font-semibold text-primary-800 mb-1">{{ __('Free trial active') }}</div>
                     <p class="text-sm text-primary-700">
-                        Tienes <strong>{{ $trialInfo['daysLeft'] }} {{ $trialInfo['daysLeft'] === 1 ? 'día' : 'días' }}</strong> y
-                        <strong>{{ $creditBalance }}&nbsp;/&nbsp;{{ $trialInfo['creditLimit'] }} créditos</strong> restantes.
-                        Tu prueba vence el <strong>{{ $trialInfo['endsAt']->format('d/m/Y') }}</strong>.
-                        Al vencer, necesitarás adquirir créditos para continuar.
+                        {{ __('You have') }}
+                        <strong>{{ $trialInfo['daysLeft'] }} {{ $trialInfo['daysLeft'] === 1 ? __('day') : __('days') }}</strong>
+                        {{ __('and') }}
+                        <strong>{{ $creditBalance }}&nbsp;/&nbsp;{{ $trialInfo['creditLimit'] }} {{ __('credits') }}</strong>
+                        {{ __('remaining.') }}
+                        {{ __('Your trial expires on') }} <strong>{{ $trialInfo['endsAt']->format('m/d/Y') }}</strong>.
+                        {{ __('After it expires, you\'ll need to purchase credits to continue.') }}
                     </p>
                 </div>
             @elseif($trialInfo['hasExpired'])
                 <div class="bg-red-50 border border-red-200 rounded-xl px-5 py-4">
-                    <div class="font-semibold text-red-800 mb-1">Prueba gratuita expirada</div>
+                    <div class="font-semibold text-red-800 mb-1">{{ __('Free trial expired') }}</div>
                     <p class="text-sm text-red-700">
-                        Tu período de prueba de {{ $trialInfo['creditLimit'] }} evaluaciones gratuitas ha concluido.
-                        Adquiere un paquete de créditos para seguir enviando evaluaciones.
+                        {{ __('Your free trial of :count assessments has ended.', ['count' => $trialInfo['creditLimit']]) }}
+                        {{ __('Purchase a credit package to continue sending assessments.') }}
                     </p>
                 </div>
             @endif
