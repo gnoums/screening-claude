@@ -44,11 +44,13 @@ class CreditsService
             throw new \DomainException(__('Insufficient credit balance.'));
         }
 
+        $folio = $request->user_request_number ?? $request->id;
+
         return $this->record(
             $user,
             -$amount,
             'usage',
-            "Solicitud #{$request->id} enviada",
+            "request_sent|{$folio}",
             $request,
         );
     }
@@ -58,11 +60,13 @@ class CreditsService
      */
     public function refund(ScreeningRequest $request, string $reason = ''): CreditsLedger
     {
+        $folio = $request->user_request_number ?? $request->id;
+
         return $this->record(
             $request->user,
             $request->credits_charged,
             'refund',
-            "Reembolso solicitud #{$request->id}. {$reason}",
+            "request_refund|{$folio}",
             $request,
         );
     }

@@ -93,7 +93,19 @@
                 @forelse($ledger as $entry)
                     <div class="px-6 py-3 border-b border-gray-50 flex items-center justify-between">
                         <div>
-                            <div class="text-sm text-gray-700">{{ $entry->description ?: ucfirst($entry->type) }}</div>
+                            <div class="text-sm text-gray-700">
+                                @php
+                                    $desc = $entry->description;
+                                    if (preg_match('/^request_sent\|(\d+)$/', $desc, $m)) {
+                                        $desc = __('Request #:number sent', ['number' => $m[1]]);
+                                    } elseif (preg_match('/^request_refund\|(\d+)$/', $desc, $m)) {
+                                        $desc = __('Refund request #:number', ['number' => $m[1]]);
+                                    } elseif (!$desc) {
+                                        $desc = ucfirst($entry->type);
+                                    }
+                                @endphp
+                                {{ $desc }}
+                            </div>
                             <div class="text-xs text-gray-400">{{ $entry->created_at->format('d/m/Y H:i') }}</div>
                         </div>
                         <div class="flex items-center gap-3">

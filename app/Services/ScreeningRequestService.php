@@ -61,14 +61,20 @@ class ScreeningRequestService
                 );
             }
 
+            // Calcular folio secuencial por psicólogo (con bloqueo para evitar duplicados)
+            $userRequestNumber = ScreeningRequest::where('user_id', $psychologist->id)
+                ->lockForUpdate()
+                ->count() + 1;
+
             // Crear solicitud
             $request = ScreeningRequest::create([
-                'user_id'            => $psychologist->id,
-                'patient_id'         => $patient->id,
-                'status'             => 'draft',
-                'recipient_email'    => $recipientEmail,
-                'message_to_patient' => $messageToPatient,
-                'credits_charged'    => $totalCredits,
+                'user_id'             => $psychologist->id,
+                'user_request_number' => $userRequestNumber,
+                'patient_id'          => $patient->id,
+                'status'              => 'draft',
+                'recipient_email'     => $recipientEmail,
+                'message_to_patient'  => $messageToPatient,
+                'credits_charged'     => $totalCredits,
             ]);
 
             // Crear ítems en el orden recibido
