@@ -47,8 +47,15 @@ class ScreeningRequestService
             $assessments    = Assessment::active()->whereIn('id', $assessmentIds)->get();
             $totalCredits   = $assessments->sum('credits_cost');
 
-            // Validar créditos antes de crear
-            if (! $psychologist->hasCredits($totalCredits)) {
+            // Validar acceso según estado del trial
+            if ($psychologist->trialHasExpired()) {
+                if ($psychologist->paidCreditBalance() < $totalCredits) {
+                    throw new \DomainException(
+                        'Tu período de prueba gratuito de ' . \App\Services\TrialService::TRIAL_DAYS . ' días ha expirado. '
+                        . 'Adquiere créditos para continuar enviando evaluaciones.',
+                    );
+                }
+            } elseif (! $psychologist->hasCredits($totalCredits)) {
                 throw new \DomainException(
                     "Créditos insuficientes. Necesitas {$totalCredits} y tienes {$psychologist->creditBalance()}.",
                 );

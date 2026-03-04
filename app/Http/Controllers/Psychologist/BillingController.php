@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Psychologist;
 
 use App\Http\Controllers\Controller;
 use App\Services\BillingService;
+use App\Services\TrialService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -36,6 +37,15 @@ class BillingController extends Controller
             ->limit(3)
             ->get();
 
+        $trialInfo = [
+            'hasStarted'  => $user->hasStartedTrial(),
+            'isActive'    => $user->isOnActiveTrial(),
+            'hasExpired'  => $user->trialHasExpired(),
+            'daysLeft'    => $user->trialDaysLeft(),
+            'endsAt'      => $user->trialEndsAt(),
+            'creditLimit' => TrialService::TRIAL_CREDITS,
+        ];
+
         return view('psychologist.billing.index', [
             'user'            => $user,
             'creditBalance'   => $user->creditBalance(),
@@ -43,6 +53,7 @@ class BillingController extends Controller
             'payments'        => $payments,
             'pendingPayments' => $pendingPayments,
             'ledger'          => $user->creditsLedger()->latest()->limit(20)->get(),
+            'trialInfo'       => $trialInfo,
         ]);
     }
 

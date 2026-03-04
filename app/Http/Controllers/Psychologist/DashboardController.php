@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Psychologist;
 
 use App\Http\Controllers\Controller;
+use App\Services\TrialService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -32,6 +33,15 @@ class DashboardController extends Controller
                 ->get(),
         ];
 
-        return view('psychologist.dashboard', compact('stats'));
+        $trialInfo = [
+            'hasStarted'  => $user->hasStartedTrial(),
+            'isActive'    => $user->isOnActiveTrial(),
+            'hasExpired'  => $user->trialHasExpired(),
+            'daysLeft'    => $user->trialDaysLeft(),
+            'endsAt'      => $user->trialEndsAt(),
+            'creditLimit' => TrialService::TRIAL_CREDITS,
+        ];
+
+        return view('psychologist.dashboard', compact('stats', 'trialInfo'));
     }
 }

@@ -18,6 +18,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'trial_starts_at',
     ];
 
     protected $hidden = [
@@ -30,6 +31,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
+            'trial_starts_at'   => 'datetime',
         ];
     }
 
@@ -93,5 +95,55 @@ class User extends Authenticatable
     public function hasCredits(int $amount = 1): bool
     {
         return $this->creditBalance() >= $amount;
+    }
+
+    /**
+     * Saldo neto de créditos pagados (compras - consumo).
+     * Excluye créditos de trial. Útil al verificar acceso tras expiración.
+     */
+    public function paidCreditBalance(): int
+    {
+        $purchased = (int) $this->creditsLedger()
+            ->whereIn('type', ['purchase', 'adjustment', 'refund'])
+            ->sum('amount');
+
+        $used = abs((int) $this->creditsLedger()
+            ->where('type', 'usage')
+            ->sum('amount'));
+
+        return max(0, $purchased - $used);
+    }
+
+    // ----------------------------------------------------------------
+    // Helpers: trial gratuito
+    // ----------------------------------------------------------------
+
+    public function hasStartedTrial(): bool
+    {
+        return $this->trial_starts_at !== null;
+    }
+
+    public function trialEndsAt(): ?\Illuminate\Support\Carbon
+    {
+        return $this->trial_starts_at?->addDays(\App\Services\TrialService::TRIAL_DAYS);
+    }
+
+    public function isOnActiveTrial(): bool
+    {
+        return $this->hasStartedTrial() && now()->lt($this->trialEndsAt());
+    }
+
+    public function trialHasExpired(): bool
+    {
+        return $this->hasStartedTrial() && now()->gte($this->trialEndsAt());
+    }
+
+    public function trialDaysLeft(): int
+    {
+        if (! $this->isOnActiveTrial()) {
+            return 0;
+        }
+
+        return (int) now()->diffInDays($this->trialEndsAt());
     }
 }

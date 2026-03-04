@@ -8,6 +8,34 @@
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
+            {{-- Trial banner --}}
+            @if($trialInfo['isActive'])
+                <div class="mb-6 bg-primary-50 border border-primary-200 rounded-xl px-5 py-4 flex items-center justify-between">
+                    <div>
+                        <span class="font-semibold text-primary-800">Prueba gratuita activa</span>
+                        <span class="text-primary-700 ml-2">
+                            — {{ $trialInfo['daysLeft'] }} {{ $trialInfo['daysLeft'] === 1 ? 'día' : 'días' }} restantes
+                            &middot; {{ $stats['credit_balance'] }}&nbsp;/&nbsp;{{ $trialInfo['creditLimit'] }} créditos disponibles
+                        </span>
+                    </div>
+                    <a href="{{ route('psychologist.billing.index') }}"
+                       class="text-sm font-semibold text-primary-700 hover:text-primary-900 underline whitespace-nowrap ml-4">
+                        Adquirir créditos
+                    </a>
+                </div>
+            @elseif($trialInfo['hasExpired'])
+                <div class="mb-6 bg-red-50 border border-red-200 rounded-xl px-5 py-4 flex items-center justify-between">
+                    <div>
+                        <span class="font-semibold text-red-800">Tu prueba gratuita ha expirado</span>
+                        <span class="text-red-700 ml-2">— Adquiere créditos para seguir enviando evaluaciones.</span>
+                    </div>
+                    <a href="{{ route('psychologist.billing.index') }}"
+                       class="text-sm font-semibold text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition whitespace-nowrap ml-4">
+                        Comprar créditos
+                    </a>
+                </div>
+            @endif
+
             {{-- Stats Cards --}}
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <div class="bg-white rounded-xl shadow p-5 text-center">

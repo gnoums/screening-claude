@@ -6,6 +6,27 @@
     <div class="py-8">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
+            {{-- Trial banner --}}
+            @if($trialInfo['isActive'])
+                <div class="bg-primary-50 border border-primary-200 rounded-xl px-5 py-4">
+                    <div class="font-semibold text-primary-800 mb-1">Prueba gratuita activa</div>
+                    <p class="text-sm text-primary-700">
+                        Tienes <strong>{{ $trialInfo['daysLeft'] }} {{ $trialInfo['daysLeft'] === 1 ? 'día' : 'días' }}</strong> y
+                        <strong>{{ $creditBalance }}&nbsp;/&nbsp;{{ $trialInfo['creditLimit'] }} créditos</strong> restantes.
+                        Tu prueba vence el <strong>{{ $trialInfo['endsAt']->format('d/m/Y') }}</strong>.
+                        Al vencer, necesitarás adquirir créditos para continuar.
+                    </p>
+                </div>
+            @elseif($trialInfo['hasExpired'])
+                <div class="bg-red-50 border border-red-200 rounded-xl px-5 py-4">
+                    <div class="font-semibold text-red-800 mb-1">Prueba gratuita expirada</div>
+                    <p class="text-sm text-red-700">
+                        Tu período de prueba de {{ $trialInfo['creditLimit'] }} evaluaciones gratuitas ha concluido.
+                        Adquiere un paquete de créditos para seguir enviando evaluaciones.
+                    </p>
+                </div>
+            @endif
+
             {{-- Current balance --}}
             <div class="bg-gradient-to-r from-primary-600 to-primary-400 rounded-2xl shadow-lg p-6 text-white flex items-center justify-between">
                 <div>
