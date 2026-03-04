@@ -59,6 +59,7 @@
                                 </div>
                             @endif
                             <div class="text-2xl font-bold text-gray-800">{{ __($package['label']) }}</div>
+                            <div class="text-sm font-medium text-gray-500 mt-0.5">{{ $package['credits'] }} {{ __('credits') }}</div>
                             <div class="text-3xl font-bold text-primary-600 mt-2">
                                 ${{ number_format($package['amount_usd'], 2) }}
                                 <span class="text-sm font-normal text-gray-500">USD</span>
