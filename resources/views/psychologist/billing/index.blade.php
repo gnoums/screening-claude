@@ -58,14 +58,14 @@
                                     {{ __('MOST POPULAR') }}
                                 </div>
                             @endif
-                            <div class="text-2xl font-bold text-gray-800">{{ $package['label'] }}</div>
+                            <div class="text-2xl font-bold text-gray-800">{{ __($package['label']) }}</div>
                             <div class="text-3xl font-bold text-primary-600 mt-2">
-                                ${{ number_format($package['amount_mxn']) }}
-                                <span class="text-sm font-normal text-gray-500">MXN</span>
+                                ${{ number_format($package['amount_usd'], 2) }}
+                                <span class="text-sm font-normal text-gray-500">USD</span>
                             </div>
-                            <div class="text-sm text-gray-500 mt-1">{{ $package['description'] }}</div>
+                            <div class="text-sm text-gray-500 mt-1">{{ __($package['description']) }}</div>
                             <div class="text-xs text-gray-400 mt-1">
-                                ${{ number_format($package['amount_mxn'] / $package['credits'], 1) }}{{ __('/credit') }}
+                                ${{ number_format($package['amount_usd'] / $package['credits'], 2) }}{{ __('/credit') }}
                             </div>
 
                             <form method="POST" action="{{ route('psychologist.billing.checkout') }}" class="mt-4">

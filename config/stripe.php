@@ -14,35 +14,34 @@ return [
     |--------------------------------------------------------------------------
     | Catálogo de paquetes de créditos
     |--------------------------------------------------------------------------
-    | Cada paquete define su price_id de Stripe (crear en el Dashboard de Stripe)
-    | y los créditos que otorga al comprar.
-    |
-    | Para crear un price en Stripe: Dashboard → Products → Add Product
-    | Usa precios únicos (one_time), no recurrentes.
+    | label       → clave de traducción (en) para el nombre del paquete
+    | description → clave de traducción (en) para la descripción
+    | amount_usd  → precio de referencia en USD (solo para mostrar en la vista)
+    | price_id    → Price ID de Stripe (configurar en .env)
     */
     'credit_packages' => [
-        'credits_10' => [
-            'label'       => '10 créditos',
-            'credits'     => 10,
-            'price_id'    => env('STRIPE_PRICE_CREDITS_10', 'price_xxxxxx'),
-            'amount_mxn'  => 199, // precio referencial en pesos MXN
-            'description' => 'Ideal para empezar',
+        'starter' => [
+            'label'       => 'Starter',
+            'credits'     => 5,
+            'price_id'    => env('STRIPE_PRICE_STARTER', 'price_xxxxxx'),
+            'amount_usd'  => 19.90,
+            'description' => 'Ideal for getting started',
             'popular'     => false,
         ],
-        'credits_30' => [
-            'label'       => '30 créditos',
-            'credits'     => 30,
-            'price_id'    => env('STRIPE_PRICE_CREDITS_30', 'price_xxxxxx'),
-            'amount_mxn'  => 499,
-            'description' => 'Ahorra 16% vs paquete básico',
+        'professional' => [
+            'label'       => 'Professional',
+            'credits'     => 15,
+            'price_id'    => env('STRIPE_PRICE_PROFESSIONAL', 'price_xxxxxx'),
+            'amount_usd'  => 49.90,
+            'description' => 'Save 16% vs Starter',
             'popular'     => true,
         ],
-        'credits_100' => [
-            'label'       => '100 créditos',
-            'credits'     => 100,
-            'price_id'    => env('STRIPE_PRICE_CREDITS_100', 'price_xxxxxx'),
-            'amount_mxn'  => 1499,
-            'description' => 'Mejor precio por crédito',
+        'clinic' => [
+            'label'       => 'Clinic / Team',
+            'credits'     => 35,
+            'price_id'    => env('STRIPE_PRICE_CLINIC', 'price_xxxxxx'),
+            'amount_usd'  => 99.90,
+            'description' => 'Best price per assessment',
             'popular'     => false,
         ],
     ],
