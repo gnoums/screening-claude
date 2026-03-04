@@ -81,7 +81,7 @@
                     @endforeach
                 </div>
                 <p class="text-xs text-gray-400 mt-3 text-center">
-                    {{ __('Secure payment processed by Stripe. We do not store card data.') }}
+                    {{ __('Credits never expire.') }} · {{ __('Secure payment processed by Stripe. We do not store card data.') }}
                 </p>
             </div>
 
