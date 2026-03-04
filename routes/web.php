@@ -52,7 +52,7 @@ Route::middleware('throttle:public-screening')->group(function () {
 // Landing page
 // ====================================================================
 
-Route::get('/', fn () => view('welcome'))->name('home');
+Route::get('/', fn () => redirect()->route('login'))->name('home');
 
 // ====================================================================
 // Área autenticada — Psicóloga
