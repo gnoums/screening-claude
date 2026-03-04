@@ -139,16 +139,24 @@
                         <div x-data="{
                                 open: false,
                                 selected: { label: '— Color —', value: '', color: '' },
+                                dropTop: 0, dropLeft: 0, dropWidth: 0,
                                 options: [
                                     { value: '#4CAF50', color: '#4CAF50', label: 'Verde — Mínima' },
                                     { value: '#8BC34A', color: '#8BC34A', label: 'Verde claro — Leve' },
                                     { value: '#FFC107', color: '#FFC107', label: 'Ámbar — Moderada' },
                                     { value: '#FF9800', color: '#FF9800', label: 'Naranja — Mod. severa' },
                                     { value: '#F44336', color: '#F44336', label: 'Rojo — Severa' }
-                                ]
+                                ],
+                                toggle() {
+                                    const rect = this.$refs.btn.getBoundingClientRect();
+                                    this.dropWidth = rect.width;
+                                    this.dropLeft  = rect.left;
+                                    this.dropTop   = rect.top - (5 * 36 + 8);
+                                    this.open = !this.open;
+                                }
                              }" class="relative">
                             <input type="hidden" name="color_code" :value="selected.value">
-                            <button type="button" @click="open = !open"
+                            <button x-ref="btn" type="button" @click="toggle()"
                                     class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm flex items-center gap-2 bg-white text-left h-[38px]">
                                 <span x-show="selected.color" class="w-4 h-4 rounded-full border-0 flex-shrink-0"
                                       :style="'background:' + selected.color"></span>
@@ -157,17 +165,20 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
-                            <div x-show="open" @click.outside="open = false" x-cloak
-                                 class="absolute z-20 bottom-full mb-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg py-1">
-                                <template x-for="opt in options" :key="opt.value">
-                                    <button type="button" @click="selected = opt; open = false"
-                                            class="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-50 text-left">
-                                        <span class="w-4 h-4 rounded-full border-0 flex-shrink-0"
-                                              :style="'background:' + opt.color"></span>
-                                        <span x-text="opt.label" class="text-gray-700"></span>
-                                    </button>
-                                </template>
-                            </div>
+                            <template x-teleport="body">
+                                <div x-show="open" @click.outside="open = false" x-cloak
+                                     :style="'position:fixed; z-index:9999; top:' + dropTop + 'px; left:' + dropLeft + 'px; width:' + dropWidth + 'px;'"
+                                     class="bg-white border border-gray-200 rounded-lg shadow-xl py-1">
+                                    <template x-for="opt in options" :key="opt.value">
+                                        <button type="button" @click="selected = opt; open = false"
+                                                class="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-gray-50 text-left">
+                                            <span class="w-4 h-4 rounded-full border-0 flex-shrink-0"
+                                                  :style="'background:' + opt.color"></span>
+                                            <span x-text="opt.label" class="text-gray-700"></span>
+                                        </button>
+                                    </template>
+                                </div>
+                            </template>
                         </div>
                         <textarea name="interpretation_text" placeholder="Texto de interpretación clínica" required
                                   class="col-span-2 border border-gray-300 rounded-lg px-3 py-2 text-sm" rows="2"></textarea>
