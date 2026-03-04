@@ -227,5 +227,17 @@
     "Log Out": "Cerrar sesión",
     "Request #:number sent": "Solicitud #:number enviada",
     "Refund request #:number": "Reembolso solicitud #:number",
-    ":count credits purchased — Stripe :id": "Compra de :count créditos — Stripe :id"
+    ":count credits purchased — Stripe :id": "Compra de :count créditos — Stripe :id",
+    "Administration Panel": "Panel de Administración",
+    "Registered psychologists": "Psicólogos registrados",
+    "Active this month": "Activos este mes",
+    "Assessments this month": "Evaluaciones este mes",
+    "Revenue this month": "Ingresos este mes",
+    "Recent payments": "Pagos recientes",
+    "No payments yet.": "Sin pagos aún.",
+    "Recent activity": "Actividad reciente",
+    "View all": "Ver todo",
+    "No events yet.": "Sin eventos aún.",
+    "Users": "Usuarios",
+    "Assessments": "Evaluaciones"
 }

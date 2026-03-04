@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex items-center gap-2">
             <span class="text-xs font-bold bg-red-100 text-red-700 px-2 py-1 rounded">ADMIN</span>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Panel de Administración</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Administration Panel') }}</h2>
         </div>
     </x-slot>
 
@@ -13,21 +13,21 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-white rounded-xl shadow p-5 text-center">
                     <div class="text-3xl font-bold text-gray-700">{{ $stats['total_users'] }}</div>
-                    <div class="text-sm text-gray-500 mt-1">Psicólogas registradas</div>
+                    <div class="text-sm text-gray-500 mt-1">{{ __('Registered psychologists') }}</div>
                 </div>
                 <div class="bg-white rounded-xl shadow p-5 text-center">
                     <div class="text-3xl font-bold text-primary-600">{{ $stats['active_users'] }}</div>
-                    <div class="text-sm text-gray-500 mt-1">Activas este mes</div>
+                    <div class="text-sm text-gray-500 mt-1">{{ __('Active this month') }}</div>
                 </div>
                 <div class="bg-white rounded-xl shadow p-5 text-center">
                     <div class="text-3xl font-bold text-green-600">{{ $stats['requests_month'] }}</div>
-                    <div class="text-sm text-gray-500 mt-1">Evaluaciones este mes</div>
+                    <div class="text-sm text-gray-500 mt-1">{{ __('Assessments this month') }}</div>
                 </div>
                 <div class="bg-white rounded-xl shadow p-5 text-center">
                     <div class="text-3xl font-bold text-emerald-600">
-                        ${{ number_format($stats['revenue_month'], 0) }}
+                        ${{ number_format($stats['revenue_month'], 2) }} USD
                     </div>
-                    <div class="text-sm text-gray-500 mt-1">Ingresos MXN este mes</div>
+                    <div class="text-sm text-gray-500 mt-1">{{ __('Revenue this month') }}</div>
                 </div>
             </div>
 
@@ -35,11 +35,11 @@
             <div class="flex flex-wrap gap-3">
                 <a href="{{ route('admin.users.index') }}"
                    class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50 transition">
-                    👥 Usuarios
+                    👥 {{ __('Users') }}
                 </a>
                 <a href="{{ route('admin.assessments.index') }}"
                    class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50 transition">
-                    📋 Pruebas
+                    📋 {{ __('Assessments') }}
                 </a>
                 <a href="{{ route('admin.audit-logs.index') }}"
                    class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50 transition">
@@ -49,10 +49,10 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                {{-- Pagos recientes --}}
+                {{-- Recent payments --}}
                 <div class="bg-white rounded-xl shadow overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 font-semibold text-gray-800">
-                        Pagos recientes
+                        {{ __('Recent payments') }}
                     </div>
                     @forelse($stats['recent_payments'] as $payment)
                         <div class="px-6 py-3 border-b border-gray-50 flex justify-between items-center">
@@ -62,19 +62,19 @@
                             </div>
                             <div class="text-right">
                                 <div class="text-sm font-semibold text-green-600">{{ $payment->amountFormatted() }}</div>
-                                <div class="text-xs text-gray-400">{{ $payment->credits_amount }} créditos</div>
+                                <div class="text-xs text-gray-400">{{ $payment->credits_amount }} {{ __('credits') }}</div>
                             </div>
                         </div>
                     @empty
-                        <div class="px-6 py-6 text-center text-gray-400 text-sm">Sin pagos aún.</div>
+                        <div class="px-6 py-6 text-center text-gray-400 text-sm">{{ __('No payments yet.') }}</div>
                     @endforelse
                 </div>
 
-                {{-- Audit log reciente --}}
+                {{-- Recent activity --}}
                 <div class="bg-white rounded-xl shadow overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-                        <span class="font-semibold text-gray-800">Actividad reciente</span>
-                        <a href="{{ route('admin.audit-logs.index') }}" class="text-xs text-primary-600 hover:underline">Ver todo</a>
+                        <span class="font-semibold text-gray-800">{{ __('Recent activity') }}</span>
+                        <a href="{{ route('admin.audit-logs.index') }}" class="text-xs text-primary-600 hover:underline">{{ __('View all') }}</a>
                     </div>
                     @forelse($stats['recent_audit_logs'] as $log)
                         <div class="px-6 py-2 border-b border-gray-50 flex justify-between items-center">
@@ -89,7 +89,7 @@
                             <div class="text-xs text-gray-400">{{ $log->occurred_at->diffForHumans() }}</div>
                         </div>
                     @empty
-                        <div class="px-6 py-6 text-center text-gray-400 text-sm">Sin eventos aún.</div>
+                        <div class="px-6 py-6 text-center text-gray-400 text-sm">{{ __('No events yet.') }}</div>
                     @endforelse
                 </div>
             </div>
