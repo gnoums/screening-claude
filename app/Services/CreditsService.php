@@ -41,7 +41,7 @@ class CreditsService
         $amount = $request->credits_charged;
 
         if ($user->creditBalance() < $amount) {
-            throw new \DomainException('Saldo de créditos insuficiente.');
+            throw new \DomainException(__('Insufficient credit balance.'));
         }
 
         return $this->record(

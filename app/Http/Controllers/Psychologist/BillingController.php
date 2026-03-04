@@ -72,7 +72,7 @@ class BillingController extends Controller
                 $validated['package'],
             );
         } catch (\Exception $e) {
-            return back()->withErrors(['general' => 'No se pudo iniciar el pago: ' . $e->getMessage()]);
+            return back()->withErrors(['general' => __('Could not start payment: :error', ['error' => $e->getMessage()])]);
         }
 
         return redirect($session->url);

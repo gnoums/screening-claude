@@ -176,6 +176,29 @@
     "This link is personal and non-transferable. It expires in :hours hours and can only be used once. Do not share it with anyone.": "Este enlace es personal e intransferible. Expira en :hours horas y solo puede usarse una vez. No lo compartas con nadie.",
     "My Progress Matters · Psychological Screening System · If you were not expecting this email, you may ignore it.": "My Progress Matters · Sistema de Tamizaje Psicológico · Si no esperabas este correo, puedes ignorarlo.",
 
+    "Patient created successfully.": "Paciente creado correctamente.",
+    "Patient data updated.": "Datos del paciente actualizados.",
+    "Patient deleted.": "Paciente eliminado.",
+    "Access denied to this patient.": "No tienes acceso a este paciente.",
+
+    "Screening created and email sent successfully.": "Evaluación creada y correo enviado correctamente.",
+    "Screening created, but the email could not be sent (:error). Use the link below to share it manually.": "Evaluación creada, pero el correo no pudo enviarse (:error). Usa el enlace de abajo para compartirlo manualmente.",
+    "Access link resent to patient.": "Enlace de acceso re-enviado al paciente.",
+    "Could not send the email: :error. Here is the link to share it manually.": "No se pudo enviar el correo: :error. Aquí tienes el enlace para compartirlo manualmente.",
+    "Cannot resend.": "No se puede re-enviar.",
+    "Cannot generate link.": "No se puede generar enlace.",
+    "unknown error": "error desconocido",
+
+    "Could not start payment: :error": "No se pudo iniciar el pago: :error",
+    "Insufficient credit balance.": "Saldo de créditos insuficiente.",
+
+    "Access token not found.": "Token de acceso no encontrado.",
+    "The access link has expired. Request a new link from your psychologist.": "El enlace de acceso ha expirado. Solicita un nuevo enlace a tu psicóloga.",
+    "This link has already been used and cannot be opened again.": "Este enlace ya fue utilizado y no puede volver a abrirse.",
+    "This link has been cancelled. Contact your psychologist.": "Este enlace ha sido cancelado. Contacta a tu psicóloga.",
+
+    "Psychological assessment from :name – Click here to start": "Evaluación psicológica de :name – Ingresa aquí",
+
     "Email": "Correo electrónico",
     "Password": "Contraseña",
     "Remember me": "Recordarme",

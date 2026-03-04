@@ -73,10 +73,8 @@ class ScreeningRequestController extends Controller
         }
 
         $flash = $emailSent
-            ? ['success' => 'Evaluación creada y correo enviado correctamente.']
-            : ['warning' => 'Evaluación creada, pero el correo no pudo enviarse ('
-                . ($emailError ?? 'error desconocido')
-                . '). Usa el enlace de abajo para compartirlo manualmente.'];
+            ? ['success' => __('Screening created and email sent successfully.')]
+            : ['warning' => __('Screening created, but the email could not be sent (:error). Use the link below to share it manually.', ['error' => $emailError ?? __('unknown error')])];
 
         return redirect()
             ->route('psychologist.screenings.show', $screeningRequest)
@@ -106,7 +104,7 @@ class ScreeningRequestController extends Controller
     {
         $this->authorizeRequest($request, $screening);
 
-        abort_if(in_array($screening->status, ['completed', 'cancelled']), 422, 'No se puede re-enviar.');
+        abort_if(in_array($screening->status, ['completed', 'cancelled']), 422, __('Cannot resend.'));
 
         ['plain' => $plainToken] = $this->tokenService->generate($screening);
         $url = $this->tokenService->generateUrl($plainToken);
@@ -126,9 +124,8 @@ class ScreeningRequestController extends Controller
         }
 
         $flash = $emailSent
-            ? ['success' => 'Enlace de acceso re-enviado al paciente.']
-            : ['warning' => 'No se pudo enviar el correo: ' . ($emailError ?? 'error desconocido')
-                . '. Aquí tienes el enlace para compartirlo manualmente.'];
+            ? ['success' => __('Access link resent to patient.')]
+            : ['warning' => __('Could not send the email: :error. Here is the link to share it manually.', ['error' => $emailError ?? __('unknown error')])];
 
         return back()
             ->with($flash)
@@ -143,7 +140,7 @@ class ScreeningRequestController extends Controller
     {
         $this->authorizeRequest($request, $screening);
 
-        abort_if(in_array($screening->status, ['completed', 'cancelled']), 422, 'No se puede generar enlace.');
+        abort_if(in_array($screening->status, ['completed', 'cancelled']), 422, __('Cannot generate link.'));
 
         ['plain' => $plainToken] = $this->tokenService->generate($screening);
         $url = $this->tokenService->generateUrl($plainToken);

@@ -45,7 +45,7 @@ class PatientController extends Controller
 
         return redirect()
             ->route('psychologist.patients.show', $patient)
-            ->with('success', 'Paciente creado correctamente.');
+            ->with('success', __('Patient created successfully.'));
     }
 
     public function show(Request $request, Patient $patient): View
@@ -85,7 +85,7 @@ class PatientController extends Controller
 
         return redirect()
             ->route('psychologist.patients.show', $patient)
-            ->with('success', 'Datos del paciente actualizados.');
+            ->with('success', __('Patient data updated.'));
     }
 
     public function destroy(Request $request, Patient $patient): RedirectResponse
@@ -95,7 +95,7 @@ class PatientController extends Controller
 
         return redirect()
             ->route('psychologist.patients.index')
-            ->with('success', 'Paciente eliminado.');
+            ->with('success', __('Patient deleted.'));
     }
 
     // ----------------------------------------------------------------
@@ -105,7 +105,7 @@ class PatientController extends Controller
         abort_unless(
             $patient->user_id === $request->user()->id,
             403,
-            'No tienes acceso a este paciente.',
+            __('Access denied to this patient.'),
         );
     }
 }
