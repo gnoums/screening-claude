@@ -100,6 +100,8 @@
                                         $desc = __('Request #:number sent', ['number' => $m[1]]);
                                     } elseif (preg_match('/^request_refund\|(\d+)$/', $desc, $m)) {
                                         $desc = __('Refund request #:number', ['number' => $m[1]]);
+                                    } elseif (preg_match('/^credit_purchase\|(\d+)\|(\S+)$/', $desc, $m)) {
+                                        $desc = __(':count credits purchased — Stripe :id', ['count' => $m[1], 'id' => $m[2]]);
                                     } elseif (!$desc) {
                                         $desc = ucfirst($entry->type);
                                     }

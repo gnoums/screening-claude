@@ -226,5 +226,6 @@
     "Resend Verification Email": "Reenviar correo de verificación",
     "Log Out": "Cerrar sesión",
     "Request #:number sent": "Solicitud #:number enviada",
-    "Refund request #:number": "Reembolso solicitud #:number"
+    "Refund request #:number": "Reembolso solicitud #:number",
+    ":count credits purchased — Stripe :id": "Compra de :count créditos — Stripe :id"
 }

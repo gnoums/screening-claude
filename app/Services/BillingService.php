@@ -117,7 +117,7 @@ class BillingService
             user:        $payment->user,
             amount:      $payment->credits_amount,
             type:        'purchase',
-            description: "Compra de {$payment->credits_amount} créditos — Stripe {$session->id}",
+            description: "credit_purchase|{$payment->credits_amount}|{$session->id}",
             reference:   $payment,
         );
     }
