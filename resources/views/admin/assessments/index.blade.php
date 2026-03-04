@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Pruebas de Tamizaje</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Screening Assessments') }}</h2>
             <a href="{{ route('admin.assessments.create') }}"
                class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-semibold hover:bg-primary-700 transition">
-                + Nueva prueba
+                + {{ __('New assessment') }}
             </a>
         </div>
     </x-slot>
@@ -15,10 +15,10 @@
                 <table class="min-w-full divide-y divide-gray-100">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Prueba</th>
-                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Preguntas</th>
-                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Créditos</th>
-                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Estado</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{{ __('Assessment') }}</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">{{ __('Questions') }}</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">{{ __('credits') }}</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">{{ __('Status') }}</th>
                             <th class="px-6 py-3"></th>
                         </tr>
                     </thead>
@@ -38,12 +38,12 @@
                                 <td class="px-6 py-4 text-center">
                                     <span class="text-xs font-semibold px-2 py-1 rounded-full
                                         {{ $assessment->is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
-                                        {{ $assessment->is_active ? 'Activa' : 'Inactiva' }}
+                                        {{ $assessment->is_active ? __('Active') : __('Inactive') }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <a href="{{ route('admin.assessments.show', $assessment) }}"
-                                       class="text-primary-600 text-sm hover:underline">Gestionar →</a>
+                                       class="text-primary-600 text-sm hover:underline">{{ __('Manage') }} →</a>
                                 </td>
                             </tr>
                         @endforeach

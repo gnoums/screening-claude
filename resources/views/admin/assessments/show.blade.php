@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.assessments.index') }}" class="text-gray-400 hover:text-gray-600">← Pruebas</a>
+            <a href="{{ route('admin.assessments.index') }}" class="text-gray-400 hover:text-gray-600">← {{ __('Assessments') }}</a>
             <h2 class="font-semibold text-xl text-gray-800">{{ $assessment->name }}</h2>
             <a href="{{ route('admin.assessments.edit', $assessment) }}"
-               class="text-sm text-primary-600 hover:underline">Editar info</a>
+               class="text-sm text-primary-600 hover:underline">{{ __('Edit info') }}</a>
         </div>
     </x-slot>
 
@@ -22,10 +22,10 @@
                 </div>
             @endif
 
-            {{-- ---- PREGUNTAS ---- --}}
+            {{-- QUESTIONS --}}
             <div class="bg-white rounded-xl shadow overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-                    <h3 class="font-semibold text-gray-800">Preguntas ({{ $assessment->questions->count() }})</h3>
+                    <h3 class="font-semibold text-gray-800">{{ __('Questions') }} ({{ $assessment->questions->count() }})</h3>
                 </div>
 
                 @foreach($assessment->questions as $question)
@@ -39,13 +39,13 @@
                                 @endif
                             </div>
                             <form method="POST" action="{{ route('admin.assessments.questions.destroy', $question) }}" class="ml-4"
-                                  onsubmit="return confirm('¿Eliminar esta pregunta y sus opciones?')">
+                                  onsubmit="return confirm('{{ __('Delete this question and its options?') }}')">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="text-xs text-red-500 hover:text-red-700">Eliminar</button>
+                                <button type="submit" class="text-xs text-red-500 hover:text-red-700">{{ __('Delete') }}</button>
                             </form>
                         </div>
 
-                        {{-- Opciones de la pregunta --}}
+                        {{-- Question options --}}
                         <div class="ml-5 mt-2 space-y-1">
                             @foreach($question->options as $option)
                                 <div class="flex items-center justify-between text-xs text-gray-600 bg-gray-50 rounded px-3 py-1">
@@ -53,7 +53,7 @@
                                     <div class="flex items-center gap-3">
                                         <span class="font-semibold text-primary-600">+{{ $option->score_value }} pts</span>
                                         <form method="POST" action="{{ route('admin.assessments.options.destroy', $option) }}"
-                                              onsubmit="return confirm('¿Eliminar opción?')">
+                                              onsubmit="return confirm('{{ __('Delete option?') }}')">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="text-red-400 hover:text-red-600">✕</button>
                                         </form>
@@ -61,46 +61,46 @@
                                 </div>
                             @endforeach
 
-                            {{-- Añadir opción --}}
+                            {{-- Add option --}}
                             <form method="POST" action="{{ route('admin.assessments.options.store', $question) }}"
                                   class="flex gap-2 mt-2">
                                 @csrf
-                                <input type="text" name="option_text" placeholder="Texto de la opción" required
+                                <input type="text" name="option_text" placeholder="{{ __('Option text') }}" required
                                        class="flex-1 border border-gray-200 rounded px-2 py-1 text-xs">
                                 <input type="number" name="score_value" placeholder="Pts" required
                                        class="w-16 border border-gray-200 rounded px-2 py-1 text-xs text-center">
                                 <button type="submit"
                                         class="px-3 py-1 bg-gray-700 text-white rounded text-xs hover:bg-gray-800">
-                                    + Opción
+                                    + {{ __('Option') }}
                                 </button>
                             </form>
                         </div>
                     </div>
                 @endforeach
 
-                {{-- Añadir pregunta --}}
+                {{-- Add question --}}
                 <div class="px-6 py-4 bg-gray-50">
                     <form method="POST" action="{{ route('admin.assessments.questions.store', $assessment) }}"
                           class="space-y-2">
                         @csrf
                         <div class="flex gap-2">
-                            <input type="text" name="question_text" placeholder="Texto de la pregunta (ítem)" required
+                            <input type="text" name="question_text" placeholder="{{ __('Question text (item)') }}" required
                                    class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                            <input type="text" name="question_code" placeholder="Código (ej: PHQ1)"
+                            <input type="text" name="question_code" placeholder="{{ __('Code (e.g. PHQ1)') }}"
                                    class="w-28 border border-gray-300 rounded-lg px-3 py-2 text-sm">
                             <button type="submit"
                                     class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700">
-                                + Pregunta
+                                + {{ __('Question') }}
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
 
-            {{-- ---- REGLAS DE INTERPRETACIÓN ---- --}}
+            {{-- INTERPRETATION RULES --}}
             <div class="bg-white rounded-xl shadow overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-100">
-                    <h3 class="font-semibold text-gray-800">Reglas de Interpretación</h3>
+                    <h3 class="font-semibold text-gray-800">{{ __('Interpretation Rules') }}</h3>
                 </div>
 
                 @foreach($assessment->rules as $rule)
@@ -118,34 +118,34 @@
                             </div>
                         </div>
                         <form method="POST" action="{{ route('admin.assessments.rules.destroy', $rule) }}"
-                              onsubmit="return confirm('¿Eliminar esta regla?')">
+                              onsubmit="return confirm('{{ __('Delete this rule?') }}')">
                             @csrf @method('DELETE')
-                            <button type="submit" class="text-xs text-red-500 hover:text-red-700">Eliminar</button>
+                            <button type="submit" class="text-xs text-red-500 hover:text-red-700">{{ __('Delete') }}</button>
                         </form>
                     </div>
                 @endforeach
 
-                {{-- Añadir regla --}}
+                {{-- Add rule --}}
                 <div class="px-6 py-4 bg-gray-50">
                     <form method="POST" action="{{ route('admin.assessments.rules.store', $assessment) }}"
                           class="grid grid-cols-2 gap-2">
                         @csrf
-                        <input type="number" name="min_score" placeholder="Puntaje mínimo" required
+                        <input type="number" name="min_score" placeholder="{{ __('Min score') }}" required
                                class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                        <input type="number" name="max_score" placeholder="Puntaje máximo" required
+                        <input type="number" name="max_score" placeholder="{{ __('Max score') }}" required
                                class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                        <input type="text" name="severity_label" placeholder="Etiqueta (Mínima, Leve…)" required
+                        <input type="text" name="severity_label" placeholder="{{ __('Label (Minimal, Mild…)') }}" required
                                class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
                         <div x-data="{
                                 open: false,
-                                selected: { label: '— Color —', value: '', color: '' },
+                                selected: { label: '— {{ __('Color') }} —', value: '', color: '' },
                                 dropTop: 0, dropLeft: 0, dropWidth: 0,
                                 options: [
-                                    { value: '#4CAF50', color: '#4CAF50', label: 'Verde — Mínima' },
-                                    { value: '#8BC34A', color: '#8BC34A', label: 'Verde claro — Leve' },
-                                    { value: '#FFC107', color: '#FFC107', label: 'Ámbar — Moderada' },
-                                    { value: '#FF9800', color: '#FF9800', label: 'Naranja — Mod. severa' },
-                                    { value: '#F44336', color: '#F44336', label: 'Rojo — Severa' }
+                                    { value: '#4CAF50', color: '#4CAF50', label: '{{ __('Green — Minimal') }}' },
+                                    { value: '#8BC34A', color: '#8BC34A', label: '{{ __('Light green — Mild') }}' },
+                                    { value: '#FFC107', color: '#FFC107', label: '{{ __('Amber — Moderate') }}' },
+                                    { value: '#FF9800', color: '#FF9800', label: '{{ __('Orange — Mod. severe') }}' },
+                                    { value: '#F44336', color: '#F44336', label: '{{ __('Red — Severe') }}' }
                                 ],
                                 toggle() {
                                     const rect = this.$refs.btn.getBoundingClientRect();
@@ -180,11 +180,11 @@
                                 </div>
                             </template>
                         </div>
-                        <textarea name="interpretation_text" placeholder="Texto de interpretación clínica" required
+                        <textarea name="interpretation_text" placeholder="{{ __('Clinical interpretation text') }}" required
                                   class="col-span-2 border border-gray-300 rounded-lg px-3 py-2 text-sm" rows="2"></textarea>
                         <button type="submit"
                                 class="col-span-2 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700">
-                            + Añadir regla
+                            + {{ __('Add rule') }}
                         </button>
                     </form>
                 </div>

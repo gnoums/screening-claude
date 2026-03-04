@@ -1,24 +1,24 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Gestión de Usuarias</h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('User Management') }}</h2>
     </x-slot>
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            {{-- Búsqueda --}}
+            {{-- Search --}}
             <form method="GET" class="mb-6 flex gap-3">
                 <input type="text" name="search" value="{{ request('search') }}"
-                       placeholder="Buscar por nombre o email…"
+                       placeholder="{{ __('Search by name or email…') }}"
                        class="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
                 <button type="submit"
                         class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition">
-                    Buscar
+                    {{ __('Search') }}
                 </button>
                 @if(request('search'))
                     <a href="{{ route('admin.users.index') }}"
                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition">
-                        Limpiar
+                        {{ __('Clear') }}
                     </a>
                 @endif
             </form>
@@ -27,11 +27,11 @@
                 <table class="min-w-full divide-y divide-gray-100">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Usuaria</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Rol</th>
-                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Pacientes</th>
-                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Solicitudes</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Registrada</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{{ __('User') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{{ __('Role') }}</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">{{ __('Patients') }}</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase">{{ __('Requests') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">{{ __('Registered') }}</th>
                             <th class="px-6 py-3"></th>
                         </tr>
                     </thead>
@@ -53,13 +53,13 @@
                                 <td class="px-6 py-4 text-sm text-gray-500">{{ $user->created_at->format('d/m/Y') }}</td>
                                 <td class="px-6 py-4 text-right">
                                     <a href="{{ route('admin.users.show', $user) }}"
-                                       class="text-primary-600 text-sm hover:underline">Ver →</a>
+                                       class="text-primary-600 text-sm hover:underline">{{ __('View') }} →</a>
                                 </td>
                             </tr>
                         @empty
                             <tr>
                                 <td colspan="6" class="px-6 py-8 text-center text-gray-400">
-                                    No se encontraron usuarias.
+                                    {{ __('No users found.') }}
                                 </td>
                             </tr>
                         @endforelse
