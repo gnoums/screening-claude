@@ -210,8 +210,12 @@
                 {{-- Fila: valores encima de cada barra --}}
                 <tr>
                     @foreach($answers as $answer)
-                    @php $score = (int) $answer->score_value_snapshot; @endphp
-                    <td style="text-align:center;padding:0;border:none;font-size:7px;font-weight:bold;color:{{ $barClr }};vertical-align:bottom;height:12px;">
+                    @php
+                        $score   = (int) $answer->score_value_snapshot;
+                        $pct     = $yMax > 0 ? $score / $yMax : 0;
+                        $itemClr = $pct == 0 ? '#27ae60' : ($pct <= 0.33 ? '#f39c12' : ($pct <= 0.66 ? '#e67e22' : '#c0392b'));
+                    @endphp
+                    <td style="text-align:center;padding:0;border:none;font-size:7px;font-weight:bold;color:{{ $itemClr }};vertical-align:bottom;height:12px;">
                         {{ $score > 0 ? $score : '' }}
                     </td>
                     @endforeach
@@ -222,10 +226,20 @@
                     @php
                         $score = (int) $answer->score_value_snapshot;
                         $barH  = $yMax > 0 ? (int) round($score / $yMax * $chartH) : 0;
+                        // Color por valor individual relativo al máximo posible
+                        $pct = $yMax > 0 ? $score / $yMax : 0;
+                        $itemClr = $pct == 0
+                            ? '#27ae60'         // verde  – sin síntoma
+                            : ($pct <= 0.33
+                                ? '#f39c12'     // ámbar  – leve
+                                : ($pct <= 0.66
+                                    ? '#e67e22' // naranja – moderado
+                                    : '#c0392b' // rojo   – severo
+                                ));
                     @endphp
                     <td style="vertical-align:bottom;text-align:center;padding:0 2px;border:none;border-bottom:2px solid #aaa;height:{{ $chartH }}px;">
                         @if($barH > 0)
-                        <div style="width:60%;margin:0 auto;height:{{ $barH }}px;background:{{ $barClr }};border-radius:2px 2px 0 0;"></div>
+                        <div style="width:60%;margin:0 auto;height:{{ $barH }}px;background:{{ $itemClr }};border-radius:2px 2px 0 0;"></div>
                         @endif
                     </td>
                     @endforeach
