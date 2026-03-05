@@ -97,7 +97,7 @@
     <div>
         @php $logoPath = public_path('logo.png'); @endphp
         @if(file_exists($logoPath))
-            <img src="{{ $logoPath }}" style="height:40px; max-width:180px;" alt="{{ config('app.name') }}">
+            <img src="{{ $logoPath }}" style="height:50px; max-width:200px;" alt="{{ config('app.name') }}">
         @else
             <div style="font-size:20px;font-weight:bold;color:#5a7123;">{{ config('app.name') }}</div>
         @endif
