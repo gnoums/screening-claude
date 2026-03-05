@@ -176,23 +176,10 @@
             $answers  = $response->answers->sortBy(fn($a) => $a->question->order)->values();
             $n        = $answers->count();
             $maxScore = $answers->map(fn($a) => (int) $a->score_value_snapshot)->max() ?: 1;
-            // Round up to a clean scale (e.g. 3 → 3, 5 → 5)
             $yMax     = max($maxScore, 1);
-
-            // SVG dimensions
-            $svgW   = 500;
-            $svgH   = 140;
-            $padL   = 28;   // left  – y-axis labels
-            $padB   = 24;   // bottom – x-axis labels
-            $padT   = 12;   // top
-            $padR   = 8;    // right
-            $cW     = $svgW - $padL - $padR;   // chart area width
-            $cH     = $svgH - $padT - $padB;   // chart area height
-
-            $slotW  = $n > 0 ? $cW / $n : $cW;
-            $barW   = max(6, $slotW * 0.55);
-            $barClr = $colors[0];
-            $barBg  = $colors[1];
+            $chartH   = 70; // px – max bar height
+            $barClr   = $colors[0];
+            $barBg    = $colors[1];
         @endphp
 
         <div class="section-title">
@@ -219,66 +206,42 @@
         @if($n > 0)
         <div class="chart-wrap">
             <div class="chart-title">Perfil de respuestas por ítem</div>
-            <svg width="{{ $svgW }}" height="{{ $svgH }}" xmlns="http://www.w3.org/2000/svg">
-
-                {{-- Fondo del área --}}
-                <rect x="{{ $padL }}" y="{{ $padT }}" width="{{ $cW }}" height="{{ $cH }}"
-                      fill="#f9f9f9" stroke="#e0e0e0" stroke-width="0.5"/>
-
-                {{-- Líneas horizontales de referencia (0, mitad, máx) --}}
-                @php $ySteps = $yMax <= 4 ? $yMax : 4; @endphp
-                @for($s = 0; $s <= $ySteps; $s++)
+            <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
+                {{-- Fila: valores encima de cada barra --}}
+                <tr>
+                    @foreach($answers as $answer)
+                    @php $score = (int) $answer->score_value_snapshot; @endphp
+                    <td style="text-align:center;padding:0;border:none;font-size:7px;font-weight:bold;color:{{ $barClr }};vertical-align:bottom;height:12px;">
+                        {{ $score > 0 ? $score : '' }}
+                    </td>
+                    @endforeach
+                </tr>
+                {{-- Fila: barras --}}
+                <tr>
+                    @foreach($answers as $answer)
                     @php
-                        $val   = round($yMax * $s / $ySteps);
-                        $yPos  = $padT + $cH - ($val / $yMax) * $cH;
+                        $score = (int) $answer->score_value_snapshot;
+                        $barH  = $yMax > 0 ? (int) round($score / $yMax * $chartH) : 0;
                     @endphp
-                    <line x1="{{ $padL }}" y1="{{ $yPos }}"
-                          x2="{{ $padL + $cW }}" y2="{{ $yPos }}"
-                          stroke="#dddddd" stroke-width="0.5" stroke-dasharray="3,3"/>
-                    <text x="{{ $padL - 4 }}" y="{{ $yPos + 3 }}"
-                          text-anchor="end" font-size="7" fill="#888">{{ $val }}</text>
-                @endfor
-
-                {{-- Ejes --}}
-                <line x1="{{ $padL }}" y1="{{ $padT }}"
-                      x2="{{ $padL }}" y2="{{ $padT + $cH }}"
-                      stroke="#aaa" stroke-width="1"/>
-                <line x1="{{ $padL }}" y1="{{ $padT + $cH }}"
-                      x2="{{ $padL + $cW }}" y2="{{ $padT + $cH }}"
-                      stroke="#aaa" stroke-width="1"/>
-
-                {{-- Barras --}}
-                @foreach($answers as $i => $answer)
+                    <td style="vertical-align:bottom;text-align:center;padding:0 2px;border:none;border-bottom:2px solid #aaa;height:{{ $chartH }}px;">
+                        @if($barH > 0)
+                        <div style="width:60%;margin:0 auto;height:{{ $barH }}px;background:{{ $barClr }};border-radius:2px 2px 0 0;"></div>
+                        @endif
+                    </td>
+                    @endforeach
+                </tr>
+                {{-- Fila: etiquetas eje X --}}
+                <tr>
+                    @foreach($answers as $i => $answer)
                     @php
-                        $score   = (int) $answer->score_value_snapshot;
-                        $barH    = $yMax > 0 ? ($score / $yMax) * $cH : 0;
-                        $bx      = $padL + ($i * $slotW) + ($slotW - $barW) / 2;
-                        $by      = $padT + $cH - $barH;
-                        // Question label: use code if available, else Q#
-                        $qLabel  = $answer->question->question_code
-                                    ? $answer->question->question_code
-                                    : ('Q' . ($i + 1));
-                        $labelX  = $padL + ($i * $slotW) + $slotW / 2;
+                        $qLabel = $answer->question->question_code
+                            ? $answer->question->question_code
+                            : ('Q' . ($i + 1));
                     @endphp
-
-                    {{-- Barra --}}
-                    <rect x="{{ round($bx, 1) }}" y="{{ round($by, 1) }}"
-                          width="{{ round($barW, 1) }}" height="{{ round($barH, 1) }}"
-                          fill="{{ $barClr }}" fill-opacity="0.85" rx="2"/>
-
-                    {{-- Valor encima de la barra --}}
-                    @if($score > 0)
-                    <text x="{{ round($labelX, 1) }}" y="{{ round($by - 2, 1) }}"
-                          text-anchor="middle" font-size="7" font-weight="bold"
-                          fill="{{ $barClr }}">{{ $score }}</text>
-                    @endif
-
-                    {{-- Etiqueta en eje X --}}
-                    <text x="{{ round($labelX, 1) }}" y="{{ $padT + $cH + 14 }}"
-                          text-anchor="middle" font-size="7" fill="#555">{{ $qLabel }}</text>
-                @endforeach
-
-            </svg>
+                    <td style="text-align:center;padding:2px 0 0;border:none;font-size:7px;color:#555;">{{ $qLabel }}</td>
+                    @endforeach
+                </tr>
+            </table>
         </div>
         @endif
 
