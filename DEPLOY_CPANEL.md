@@ -3,6 +3,21 @@
 
 ---
 
+## Stack de herramientas
+
+| Capa | Herramienta |
+|------|-------------|
+| Backend | Laravel 11, PHP 8.2+ |
+| Frontend | Blade + Tailwind CSS, compilado con Vite |
+| Base de datos | MySQL (cPanel) |
+| PDF | barryvdh/laravel-dompdf |
+| Email transaccional | **Resend** (`resend.com`) |
+| Pagos | **Stripe** (paquetes de créditos one-time) |
+| Hosting | **cPanel** (shared/VPS) |
+| SSL | Let's Encrypt vía cPanel |
+
+---
+
 ## Arquitectura
 
 ```
@@ -77,22 +92,34 @@ nano .env
 
 Variables críticas a llenar:
 ```dotenv
+APP_NAME="PsicoScreen"
+APP_ENV=production
+APP_DEBUG=false
 APP_URL=https://app.dev2byroca.com
 APP_KEY=                          # se genera en el paso 7
 
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
 DB_DATABASE=tu_usuario_psicoscreen
 DB_USERNAME=tu_usuario_dbuser
 DB_PASSWORD=tu_password_segura
 
-MAIL_USERNAME=noreply@dev2byroca.com
-MAIL_PASSWORD=contraseña_de_aplicacion_zoho
+# Email — Resend
+MAIL_MAILER=resend
+RESEND_KEY=re_xxxxxxxxxxxxxxxxxxxx
+MAIL_FROM_ADDRESS="noreply@dev2byroca.com"
+MAIL_FROM_NAME="PsicoScreen"
 
+# Stripe
 STRIPE_KEY=pk_live_...
 STRIPE_SECRET=sk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_...
-STRIPE_PRICE_CREDITS_10=price_...
-STRIPE_PRICE_CREDITS_30=price_...
-STRIPE_PRICE_CREDITS_100=price_...
+STRIPE_PRICE_STARTER=price_...       # 5 créditos  – $19.90 USD
+STRIPE_PRICE_PROFESSIONAL=price_...  # 15 créditos – $49.90 USD
+STRIPE_PRICE_CLINIC=price_...        # 35 créditos – $99.90 USD
+
+SESSION_SECURE_COOKIE=true
 ```
 
 ### 7. Generar clave de aplicación
@@ -108,7 +135,7 @@ php artisan migrate --force
 php artisan db:seed --class=AssessmentSeeder --force
 ```
 
-> Crea las 14 tablas y siembra PHQ-9 y GAD-7 con sus preguntas y reglas de interpretación.
+> Crea las tablas y siembra PHQ-9 y GAD-7 con sus preguntas y reglas de interpretación.
 
 ### 9. Optimizar para producción
 
@@ -166,40 +193,43 @@ En el [Dashboard de Stripe](https://dashboard.stripe.com/webhooks):
 
 ---
 
-## Configurar Zoho Mail (SMTP)
+## Configurar Resend (email transaccional)
 
-1. En [Zoho Mail Admin Console](https://mailadmin.zoho.com):
-   - Verificar el dominio `dev2byroca.com` (registro TXT en tu DNS)
-   - Crear dirección: `noreply@dev2byroca.com`
-2. En la cuenta Zoho → **Seguridad** → **Contraseñas de aplicación**:
-   - Crear contraseña para "PsicoScreen SMTP"
-   - Usar esa contraseña (no la de tu cuenta Zoho) en `MAIL_PASSWORD`
-3. Registros DNS recomendados para evitar spam:
-   ```
-   SPF:   v=spf1 include:zoho.com ~all
-   DKIM:  generado en Zoho Admin Console → Email Authentication
-   DMARC: v=DMARC1; p=none; rua=mailto:noreply@dev2byroca.com
-   ```
+Resend es el servicio de email que usa la app para enviar los links de tamizaje a los pacientes.
+
+1. Crear cuenta en [resend.com](https://resend.com)
+2. En el dashboard → **Domains** → **Add Domain**:
+   - Agregar `dev2byroca.com`
+   - Resend genera los registros DNS (MX, SPF, DKIM) que debes agregar en tu panel de DNS
+   - Verificar el dominio (botón "Verify DNS Records")
+3. En **API Keys** → **Create API Key**:
+   - Nombre: `psicoscreen-production`
+   - Permiso: `Sending access`
+   - Copiar la clave `re_xxxx...` → pegar en `.env` como `RESEND_KEY`
+4. El `MAIL_FROM_ADDRESS` debe usar el dominio verificado (`noreply@dev2byroca.com`)
+
+> Laravel 11 incluye soporte nativo para Resend — no requiere paquetes adicionales.
 
 ---
 
 ## Crear productos en Stripe
 
-En Stripe Dashboard → **Products** → **Add product**:
+En Stripe Dashboard → **Products** → **Add product** (crear uno por paquete):
 
-| Producto | Precio | Tipo | Variable .env |
-|----------|--------|------|---------------|
-| 10 créditos PsicoScreen | $199 MXN | One-time | `STRIPE_PRICE_CREDITS_10` |
-| 30 créditos PsicoScreen | $499 MXN | One-time | `STRIPE_PRICE_CREDITS_30` |
-| 100 créditos PsicoScreen | $1,499 MXN | One-time | `STRIPE_PRICE_CREDITS_100` |
+| Paquete | Créditos | Precio | Variable `.env` |
+|---------|----------|--------|-----------------|
+| Starter | 5 | $19.90 USD | `STRIPE_PRICE_STARTER` |
+| Professional | 15 | $49.90 USD | `STRIPE_PRICE_PROFESSIONAL` |
+| Clinic / Team | 35 | $99.90 USD | `STRIPE_PRICE_CLINIC` |
 
-Configurar moneda como **MXN**: Stripe Dashboard → Settings → Business settings.
+- Tipo de precio: **One-time** (no recurrente)
+- Copiar el `Price ID` (`price_...`) de cada producto al `.env`
 
 ---
 
 ## Crear cuenta de administrador
 
-Regístrate como usuario normal en la app y luego promoverte a admin:
+Regístrate como usuario normal en la app y luego promuévete a admin:
 
 ```bash
 php artisan tinker
@@ -212,14 +242,15 @@ php artisan tinker
 
 - [ ] `APP_DEBUG=false` en `.env`
 - [ ] `APP_ENV=production` en `.env`
+- [ ] `SESSION_SECURE_COOKIE=true` en `.env`
 - [ ] SSL activo y Force HTTPS habilitado
 - [ ] `.env` no accesible vía web: `curl https://app.dev2byroca.com/.env` debe retornar 404
-- [ ] Verificar email: `php artisan tinker` → `Mail::raw('test', fn($m) => $m->to('tu@correo.com')->subject('test'));`
+- [ ] Verificar email con Resend: enviar un tamizaje de prueba y confirmar que llega
+- [ ] Dominio verificado en Resend (DNS en verde)
 - [ ] Stripe en modo **live** (claves `pk_live_` / `sk_live_`)
-- [ ] Webhook de Stripe configurado y verificado (evento de prueba desde Dashboard)
-- [ ] Los 3 Cron Jobs activos
+- [ ] Webhook de Stripe configurado y verificado (usar "Send test event" desde el Dashboard)
+- [ ] Los 3 Cron Jobs activos en cPanel
 - [ ] Backups automáticos de BD activados en cPanel
-- [ ] `SESSION_SECURE_COOKIE=true` con SSL activo
 
 ---
 
