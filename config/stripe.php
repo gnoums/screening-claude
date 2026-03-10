@@ -41,7 +41,7 @@ return [
             'credits'     => 35,
             'price_id'    => env('STRIPE_PRICE_CLINIC', 'price_xxxxxx'),
             'amount_usd'  => 99.90,
-            'description' => 'Best price per assessment',
+            'description' => 'Best price per screening test',
             'popular'     => false,
         ],
     ],

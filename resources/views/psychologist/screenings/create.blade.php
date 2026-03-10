@@ -47,12 +47,12 @@
                         <x-input-error :messages="$errors->get('patient_id')" class="mt-1" />
                     </div>
 
-                    {{-- Assessments --}}
+                    {{-- Screening Tests --}}
                     <div>
-                        <x-input-label :value="__('Assessments to apply')" />
-                        <p class="text-xs text-gray-400 mb-2">{{ __('Select one or more assessments') }}</p>
+                        <x-input-label :value="__('Screening Tests to apply')" />
+                        <p class="text-xs text-gray-400 mb-2">{{ __('Select one or more screening tests') }}</p>
                         @if($assessments->isEmpty())
-                            <p class="text-sm text-gray-500">{{ __('No assessments available.') }}</p>
+                            <p class="text-sm text-gray-500">{{ __('No screening tests available.') }}</p>
                         @else
                             <div class="space-y-2">
                                 @foreach($assessments as $assessment)
@@ -91,7 +91,7 @@
                     <div>
                         <x-input-label for="message_to_patient" :value="__('Message for patient (optional)')" />
                         <textarea id="message_to_patient" name="message_to_patient" rows="3"
-                            placeholder="Hi, here is the link to complete your assessment…"
+                            placeholder="Hi, here is the link to complete your screening test…"
                             class="mt-1 block w-full border-gray-300 focus:border-primary-500 focus:ring-primary-500 rounded-md shadow-sm text-sm">{{ old('message_to_patient') }}</textarea>
                         <x-input-error :messages="$errors->get('message_to_patient')" class="mt-1" />
                     </div>

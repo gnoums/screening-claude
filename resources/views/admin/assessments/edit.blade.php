@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex items-center gap-3">
             <a href="{{ route('admin.assessments.show', $assessment) }}" class="text-gray-400 hover:text-gray-600">← {{ $assessment->name }}</a>
-            <h2 class="font-semibold text-xl text-gray-800">{{ __('Edit assessment') }}</h2>
+            <h2 class="font-semibold text-xl text-gray-800">{{ __('Edit screening test') }}</h2>
         </div>
     </x-slot>
 

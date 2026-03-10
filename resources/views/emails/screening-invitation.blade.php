@@ -28,7 +28,7 @@
 
         <p>
             <strong>{{ $request->user->name }}</strong>
-            {{ __('has sent you a psychological assessment to complete online in a confidential manner.') }}
+            {{ __('has sent you a psychological screening test to complete online in a confidential manner.') }}
         </p>
 
         @if($request->message_to_patient)
@@ -50,7 +50,7 @@
 
         <p>{{ __('To respond, click the button:') }}</p>
 
-        <a href="{{ $accessUrl }}" class="btn">{{ __('Start assessment') }}</a>
+        <a href="{{ $accessUrl }}" class="btn">{{ __('Start screening test') }}</a>
 
         <p style="font-size:12px;color:#888;">
             {{ __('Or copy and paste this link in your browser:') }}<br>

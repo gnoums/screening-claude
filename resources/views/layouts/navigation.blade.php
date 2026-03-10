@@ -21,7 +21,7 @@
                             {{ __('Users') }}
                         </x-nav-link>
                         <x-nav-link :href="route('admin.assessments.index')" :active="request()->routeIs('admin.assessments.*')">
-                            {{ __('Assessments') }}
+                            {{ __('Screening Tests') }}
                         </x-nav-link>
                         <x-nav-link :href="route('admin.audit-logs.index')" :active="request()->routeIs('admin.audit-logs.*')">
                             {{ __('Audit Logs') }}
@@ -124,7 +124,7 @@
                     {{ __('Users') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.assessments.index')" :active="request()->routeIs('admin.assessments.*')">
-                    {{ __('Assessments') }}
+                    {{ __('Screening Tests') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.audit-logs.index')" :active="request()->routeIs('admin.audit-logs.*')">
                     {{ __('Audit Logs') }}

@@ -19,7 +19,7 @@ $t = ($lang === 'en') ? [
         'other'             => 'Other',
         'prefer_not_to_say' => 'Prefer not to say',
     ],
-    'eval_section'     => 'Assessment Information',
+    'eval_section'     => 'Screening Test Information',
     'applied_date'     => 'Application date',
     'report_date'      => 'Report date',
     'tests_applied'    => 'Test(s) applied',
@@ -54,7 +54,7 @@ $t = ($lang === 'en') ? [
         'other'             => 'Otro',
         'prefer_not_to_say' => 'Prefiero no decir',
     ],
-    'eval_section'     => 'Información de la Evaluación',
+    'eval_section'     => 'Información de la Prueba de Tamizaje',
     'applied_date'     => 'Fecha de aplicación',
     'report_date'      => 'Fecha del reporte',
     'tests_applied'    => 'Prueba(s) aplicada(s)',
@@ -71,7 +71,7 @@ $t = ($lang === 'en') ? [
     'col_score'        => 'Puntaje',
     'scale_version'    => 'Versión de la escala',
     'disclaimer_title' => 'AVISO IMPORTANTE',
-    'disclaimer_text'  => 'Los resultados de esta herramienta de tamizaje no constituyen un diagnóstico por sí solos. Este reporte está destinado exclusivamente al uso de profesionales de salud mental calificados. Los resultados deben interpretarse en el contexto de una evaluación clínica integral.',
+    'disclaimer_text'  => 'Los resultados de esta herramienta de tamizaje no constituyen un diagnóstico por sí solos. Este reporte está destinado exclusivamente al uso de profesionales de salud mental calificados. Los resultados deben interpretarse en el contexto de una valoración clínica integral.',
     'generated_by'     => 'Generado por',
     'report_id'        => 'Reporte ID',
 ];
@@ -117,7 +117,7 @@ $t = ($lang === 'en') ? [
     </tr>
 </table>
 
-{{-- INFO DE LA EVALUACIÓN --}}
+{{-- INFO DE LA PRUEBA DE TAMIZAJE --}}
 <div class="section-title">{{ $t['eval_section'] }}</div>
 <table>
     <tr>

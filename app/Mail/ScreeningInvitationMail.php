@@ -26,7 +26,7 @@ class ScreeningInvitationMail extends Mailable
         $psychologistName = $this->request->user->name;
 
         return new Envelope(
-            subject: __('Psychological assessment from :name – Click here to start', ['name' => $psychologistName]),
+            subject: __('Psychological screening test from :name – Click here to start', ['name' => $psychologistName]),
         );
     }
 

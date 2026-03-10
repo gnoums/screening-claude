@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Assessment completed – My Progress Matters') }}</title>
+    <title>{{ __('Screening Test completed – My Progress Matters') }}</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                background: #f4f7ee; display: flex; align-items: center; justify-content: center;
@@ -24,7 +24,7 @@
 <body>
     <div class="box">
         <div class="icon">✅</div>
-        <h1>{{ __('Assessment completed!') }}</h1>
+        <h1>{{ __('Screening Test completed!') }}</h1>
         <p>
             {{ __('Your answers have been submitted successfully. Your psychologist will review the results and contact you soon.') }}
         </p>

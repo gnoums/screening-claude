@@ -27,7 +27,7 @@
                 <div class="mb-6 bg-red-50 border border-red-200 rounded-xl px-5 py-4 flex items-center justify-between">
                     <div>
                         <span class="font-semibold text-red-800">{{ __('Your free trial has expired') }}</span>
-                        <span class="text-red-700 ml-2">— {{ __('Purchase credits to continue sending assessments.') }}</span>
+                        <span class="text-red-700 ml-2">— {{ __('Purchase credits to continue sending screening tests.') }}</span>
                     </div>
                     <a href="{{ route('psychologist.billing.index') }}"
                        class="text-sm font-semibold text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition whitespace-nowrap ml-4">

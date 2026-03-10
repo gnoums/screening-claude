@@ -24,8 +24,8 @@
                 <div class="bg-red-50 border border-red-200 rounded-xl px-5 py-4">
                     <div class="font-semibold text-red-800 mb-1">{{ __('Free trial expired') }}</div>
                     <p class="text-sm text-red-700">
-                        {{ __('Your free trial of :count assessments has ended.', ['count' => $trialInfo['creditLimit']]) }}
-                        {{ __('Purchase a credit package to continue sending assessments.') }}
+                        {{ __('Your free trial of :count screening tests has ended.', ['count' => $trialInfo['creditLimit']]) }}
+                        {{ __('Purchase a credit package to continue sending screening tests.') }}
                     </p>
                 </div>
             @endif

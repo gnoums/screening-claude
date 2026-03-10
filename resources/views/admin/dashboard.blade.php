@@ -21,7 +21,7 @@
                 </div>
                 <div class="bg-white rounded-xl shadow p-5 text-center">
                     <div class="text-3xl font-bold text-green-600">{{ $stats['requests_month'] }}</div>
-                    <div class="text-sm text-gray-500 mt-1">{{ __('Assessments this month') }}</div>
+                    <div class="text-sm text-gray-500 mt-1">{{ __('Screening Tests this month') }}</div>
                 </div>
                 <div class="bg-white rounded-xl shadow p-5 text-center">
                     <div class="text-3xl font-bold text-emerald-600">
@@ -39,7 +39,7 @@
                 </a>
                 <a href="{{ route('admin.assessments.index') }}"
                    class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50 transition">
-                    📋 {{ __('Assessments') }}
+                    📋 {{ __('Screening Tests') }}
                 </a>
                 <a href="{{ route('admin.audit-logs.index') }}"
                    class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50 transition">

@@ -35,7 +35,7 @@
                     <div class="text-2xl font-bold text-primary-600 mt-1">{{ $stats['credit_balance'] }}</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-xs text-gray-500 uppercase font-semibold">{{ __('Assessments') }}</div>
+                    <div class="text-xs text-gray-500 uppercase font-semibold">{{ __('Screening Tests') }}</div>
                     <div class="text-2xl font-bold text-gray-700 mt-1">{{ $stats['requests_count'] }}</div>
                 </div>
             </div>

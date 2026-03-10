@@ -155,7 +155,7 @@
             @foreach($screening->items as $item)
                 <div class="bg-white rounded-xl shadow overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-                        <h3 class="font-semibold text-gray-700">{{ $item->assessment->name ?? __('Assessments') }}</h3>
+                        <h3 class="font-semibold text-gray-700">{{ $item->assessment->name ?? __('Screening Tests') }}</h3>
                         @php
                             $itemBadges = [
                                 'pending'   => ['bg-gray-100 text-gray-500',  __('Pending')],
@@ -234,7 +234,7 @@
         errorLink:         "{{ __('Error generating link.') }}",
         errorConnection:   "{{ __('Connection error. Try again.') }}",
         expiresOn:         "{{ __('Expires on :date', ['date' => '']) }}".replace(': ', ''),
-        waMessage:         "{{ __('Hello, :name, I am sharing the link for your psychological assessment: :url', ['name' => addslashes($screening->patient->full_name), 'url' => ':url']) }}",
+        waMessage:         "{{ __('Hello, :name, I am sharing the link for your psychological screening test: :url', ['name' => addslashes($screening->patient->full_name), 'url' => ':url']) }}",
     };
 
     @if(session('access_url'))

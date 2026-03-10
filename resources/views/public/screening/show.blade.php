@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('Psychological Assessment – :name', ['name' => $assessment->name]) }}</title>
+    <title>{{ __('Psychological Screening Test – :name', ['name' => $assessment->name]) }}</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         body {
@@ -58,7 +58,7 @@
     {{-- Header --}}
     <h1>{{ $assessment->name }}</h1>
     <p class="subtitle">
-        {{ __('Assessment sent by :name.', ['name' => $screeningRequest->user->name]) }}
+        {{ __('Screening Test sent by :name.', ['name' => $screeningRequest->user->name]) }}
         {{ __('Answer honestly according to how you have felt recently.') }}
     </p>
 

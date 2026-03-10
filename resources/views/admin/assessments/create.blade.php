@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.assessments.index') }}" class="text-gray-400 hover:text-gray-600">← {{ __('Assessments') }}</a>
-            <h2 class="font-semibold text-xl text-gray-800">{{ __('New screening assessment') }}</h2>
+            <a href="{{ route('admin.assessments.index') }}" class="text-gray-400 hover:text-gray-600">← {{ __('Screening Tests') }}</a>
+            <h2 class="font-semibold text-xl text-gray-800">{{ __('New screening test') }}</h2>
         </div>
     </x-slot>
 
@@ -92,7 +92,7 @@
                     <div class="flex gap-3 pt-2">
                         <button type="submit"
                                 class="px-6 py-2 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition">
-                            {{ __('Create assessment') }}
+                            {{ __('Create screening test') }}
                         </button>
                         <a href="{{ route('admin.assessments.index') }}"
                            class="px-6 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition">

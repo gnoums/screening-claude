@@ -100,7 +100,7 @@
                     <div class="px-6 py-4 border-b border-gray-50 flex items-center justify-between hover:bg-gray-50 transition">
                         <div>
                             <div class="font-medium text-gray-800 text-sm">
-                                {{ $req->items->pluck('assessment.name')->filter()->join(', ') ?: __('No assessments') }}
+                                {{ $req->items->pluck('assessment.name')->filter()->join(', ') ?: __('No screening tests') }}
                             </div>
                             <div class="text-xs text-gray-400 mt-0.5">
                                 {{ $req->sent_at?->format('d/m/Y H:i') ?? __('Not sent') }}
