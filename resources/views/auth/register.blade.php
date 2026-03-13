@@ -20,13 +20,11 @@
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
 
-            <div class="relative mt-1">
-                <x-text-input id="password" class="block w-full pr-10"
-                                type="password"
-                                name="password"
-                                required autocomplete="new-password" />
+            <div class="mt-1 flex items-center bg-white border border-gray-300 rounded-md shadow-sm focus-within:ring-1 focus-within:ring-primary-500 focus-within:border-primary-500">
+                <input id="password" type="password" name="password" required autocomplete="new-password"
+                       class="flex-1 min-w-0 py-2 px-3 border-0 rounded-md focus:ring-0 focus:outline-none text-gray-900 text-sm bg-transparent">
                 <button type="button" onclick="togglePassword('password', this)"
-                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600">
+                        class="flex items-center px-3 text-gray-400 hover:text-gray-600 focus:outline-none">
                     <svg id="password-eye-open" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -44,12 +42,11 @@
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
 
-            <div class="relative mt-1">
-                <x-text-input id="password_confirmation" class="block w-full pr-10"
-                                type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
+            <div class="mt-1 flex items-center bg-white border border-gray-300 rounded-md shadow-sm focus-within:ring-1 focus-within:ring-primary-500 focus-within:border-primary-500">
+                <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password"
+                       class="flex-1 min-w-0 py-2 px-3 border-0 rounded-md focus:ring-0 focus:outline-none text-gray-900 text-sm bg-transparent">
                 <button type="button" onclick="togglePassword('password_confirmation', this)"
-                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600">
+                        class="flex items-center px-3 text-gray-400 hover:text-gray-600 focus:outline-none">
                     <svg id="password_confirmation-eye-open" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
